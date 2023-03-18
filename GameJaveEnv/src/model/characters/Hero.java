@@ -37,10 +37,9 @@ public class Hero extends Character
     {
         return maxActions;
     }
-    public boolean getSpecialAction()
-    {
-        return specialAction;
-    }
+   public boolean isSpecialAction() {
+       return specialAction;
+   }
     //read only
     public ArrayList<Vaccine> getVaccineInventory() 
     {
