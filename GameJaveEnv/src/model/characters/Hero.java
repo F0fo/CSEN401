@@ -37,7 +37,7 @@ public class Hero extends Character
     {
         return maxActions;
     }
-    public boolean getSpecialAction()
+    public boolean isSpecialAction()
     {
         return specialAction;
     }

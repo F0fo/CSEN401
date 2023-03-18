@@ -1,5 +1,5 @@
 package model.collectibles;
 
-interface Collectible {
+public interface Collectible {
     
 }
