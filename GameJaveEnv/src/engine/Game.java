@@ -45,6 +45,7 @@ public class Game {
             availableHeros.add(h);
             line = br.readLine();
         }
+        br.close();
     }
 
     /*public static void main(String[] args){
