@@ -6,7 +6,7 @@ import model.collectibles.Supply;
 //read = getters, write = setters
 
 
-public class Hero extends Character 
+public abstract class Hero extends Character 
 {
 
     //read = get, write = setters
@@ -50,7 +50,7 @@ public class Hero extends Character
         return supplyInventory;
     }
     
-    Hero(String name, int maxHp, int attackDmg, int maxActions) 
+    public Hero(String name, int maxHp, int attackDmg, int maxActions) 
     {
         super(name, maxHp, attackDmg);
         this.maxActions = maxActions;
