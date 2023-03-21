@@ -20,13 +20,7 @@ public class Game {
 
     public static void loadHeroes(String filePath) throws IOException, FileNotFoundException
     {
-        /*Scanner sc = new Scanner(filePath);  
-        sc.useDelimiter(",");   //sets the delimiter pattern  
-        while (sc.hasNext())  //returns a boolean value     
-        {  
         
-        }   
-        sc.close();*/
         FileReader fr = new FileReader(filePath);
         BufferedReader br = new BufferedReader(fr);
         availableHeros = new ArrayList<Hero>();
