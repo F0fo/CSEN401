@@ -1,5 +1,8 @@
 package model.collectibles;
 
-public class Vaccine {
-    //create constructor
+public class Vaccine implements Collectible{
+    public Vaccine()
+    {
+
+    }
 }

@@ -55,6 +55,9 @@ public abstract class Hero extends Character
         super(name, maxHp, attackDmg);
         this.maxActions = maxActions;
         this.actionsAvailable = maxActions;
+        this.setCurrentHp(maxHp);
+        vaccineInventory = new ArrayList<Vaccine>();
+        supplyInventory = new ArrayList<Supply>();
     }
 
 }

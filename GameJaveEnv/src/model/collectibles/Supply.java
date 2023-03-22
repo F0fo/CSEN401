@@ -1,5 +1,11 @@
 package model.collectibles;
 
-public class Supply {
-    //create constructor
+import model.*;
+
+public class Supply implements Collectible {
+
+    public Supply()
+    {
+        
+    }
 }

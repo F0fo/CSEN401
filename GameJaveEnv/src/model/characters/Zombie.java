@@ -1,10 +1,15 @@
 package model.characters;
 
 public class Zombie extends Character {
-
-    public Zombie(String name, int maxHp, int attackDmg) 
+    private static int ZOMBIES_COUNT = 0;
+    private final static int MAXHP = 40;
+    private final static int DAMAGE = 10;
+    public Zombie() 
     {
-        super(name, maxHp, attackDmg);
+        
+        super("Zombie " + (++ZOMBIES_COUNT), MAXHP, DAMAGE);
+        setCurrentHp(MAXHP);
+        
     }
     
 }

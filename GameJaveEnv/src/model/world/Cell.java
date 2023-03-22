@@ -11,7 +11,7 @@ public abstract class Cell {
         return isVisible;
     }
 
-    public void setIsVisible(boolean isVisible){
+    public void setVisible(boolean isVisible){
         this.isVisible = isVisible;
     }
 }

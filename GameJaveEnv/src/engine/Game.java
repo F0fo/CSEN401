@@ -11,7 +11,7 @@ import java.io.IOException;
 import model.world.Cell;
 public class Game {
 
-    public static ArrayList<Hero> availableHeros;
+    public static ArrayList<Hero> availableHeroes;
     public static ArrayList<Hero> heroes;
     public static ArrayList<Zombie> zombies;
     public static Cell[][] map;
@@ -23,7 +23,7 @@ public class Game {
         
         FileReader fr = new FileReader(filePath);
         BufferedReader br = new BufferedReader(fr);
-        availableHeros = new ArrayList<Hero>();
+        availableHeroes = new ArrayList<Hero>();
         String line = br.readLine();
         while(line != null){
             String[] lineSplit = line.split(",");
@@ -31,12 +31,15 @@ public class Game {
             switch(type){
                 case("FIGH"):
                     h = new Fighter(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
+                    break;
                 case("MED"):
                     h = new Medic(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
+                    break;
                 case("EXP"):
                     h = new Explorer(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
+                break;
             }
-            availableHeros.add(h);
+            availableHeroes.add(h);
             line = br.readLine();
         }
         br.close();
