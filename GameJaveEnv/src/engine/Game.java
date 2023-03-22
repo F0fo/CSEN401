@@ -28,17 +28,15 @@ public class Game {
             switch(type){
                 case("FIGH"):
                     Fighter f = new Fighter(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
-                    availableHeros.add(f);
+                    availableHeroes.add(f);
                     break;
                 case("MED"):
-                    h = new Medic(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
-                    break;
                     Medic m = new Medic(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
-                    availableHeros.add(m);
+                    availableHeroes.add(m);
                     break;
                 case("EXP"):
                     Explorer e = new Explorer(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
-                    availableHeros.add(e);
+                    availableHeroes.add(e);
                     break;
             }
             line = br.readLine();
