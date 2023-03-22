@@ -2,13 +2,13 @@ package engine;
 import java.util.ArrayList;
 
 import model.characters.*;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
-//import java.util.Scanner;    
 import model.world.Cell;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+   
 public class Game {
 
     public static ArrayList<Hero> availableHeroes;
@@ -16,11 +16,8 @@ public class Game {
     public static ArrayList<Zombie> zombies;
     public static Cell[][] map;
 
-    public static Hero h;
-
     public static void loadHeroes(String filePath) throws IOException, FileNotFoundException
     {
-        
         FileReader fr = new FileReader(filePath);
         BufferedReader br = new BufferedReader(fr);
         availableHeroes = new ArrayList<Hero>();
@@ -30,16 +27,20 @@ public class Game {
             String type = lineSplit[1];
             switch(type){
                 case("FIGH"):
-                    h = new Fighter(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
+                    Fighter f = new Fighter(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
+                    availableHeros.add(f);
                     break;
                 case("MED"):
                     h = new Medic(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
                     break;
+                    Medic m = new Medic(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
+                    availableHeros.add(m);
+                    break;
                 case("EXP"):
-                    h = new Explorer(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
-                break;
+                    Explorer e = new Explorer(lineSplit[0], Integer.parseInt(lineSplit[2]), Integer.parseInt(lineSplit[4]), Integer.parseInt(lineSplit[3]));
+                    availableHeros.add(e);
+                    break;
             }
-            availableHeroes.add(h);
             line = br.readLine();
         }
         br.close();
