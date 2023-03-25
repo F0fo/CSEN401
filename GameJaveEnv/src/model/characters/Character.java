@@ -1,6 +1,8 @@
 package model.characters;
 import java.awt.Point;
 
+import javax.lang.model.util.ElementScanner14;
+
 //read = getters, write = setters
 //Description : A class representing the Characters available in the game. No objects of type Character can be instantiated.
 public abstract class Character {
@@ -32,7 +34,12 @@ public abstract class Character {
     }
 
     public void setCurrentHp(int currentHp) {
-        this.currentHp = (currentHp > maxHp)? maxHp : currentHp;
+        if(currentHp < 0)
+            this.currentHp = 0;
+        else if(currentHp > maxHp)
+            this.currentHp = maxHp;
+        else
+            this.currentHp = currentHp;
     }
 
     public Character getTarget() {

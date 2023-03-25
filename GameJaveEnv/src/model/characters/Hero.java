@@ -29,14 +29,6 @@ public abstract class Hero extends Character {
         this.actionsAvailable = actionsAvailable;
     }
 
-    public int getMaxActions() {
-        return maxActions;
-    }
-
-    public void setMaxActions(int maxActions) {
-        this.maxActions = maxActions;
-    }
-
     public boolean isSpecialAction() {
         return specialAction;
     }
@@ -46,6 +38,10 @@ public abstract class Hero extends Character {
     }
 
     //read only
+    public int getMaxActions() {
+        return maxActions;
+    }
+    
     public ArrayList<Vaccine> getVaccineInventory() {
         return vaccineInventory;
     }
