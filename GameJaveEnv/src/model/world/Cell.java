@@ -4,7 +4,7 @@ public abstract class Cell {
     private boolean isVisible;
     
     public Cell(){
-    
+        
     }
 
     public boolean isVisible(){
