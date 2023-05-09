@@ -1,7 +1,6 @@
 package model.characters;
 import java.awt.Point;
 
-import javax.crypto.Mac;
 //read = getters, write = setters
 //Description : A class representing the Characters available in the game. No objects of type Character can be instantiated.
 public abstract class Character {
