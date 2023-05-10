@@ -98,65 +98,56 @@ public abstract class Hero extends Character {
     }
     
     public void move(Direction d) throws MovementException, NotEnoughActionsException{ // still need to update visibility
-    	if(actionsAvailable > 0) {
-	    	if(d == Direction.UP) {
-	    		if(getLocation().y < 14 && ((Game.map[13 - getLocation().y][getLocation().x] instanceof CharacterCell)
-	    				&& ((CharacterCell)Game.map[13 - getLocation().y][getLocation().x]).getCharacter() == null)
-	    				|| !(Game.map[13 - getLocation().y][getLocation().x] instanceof CharacterCell)) {
-	    			moveHelper(Game.map[13 - getLocation().y][getLocation().x]);
-	    			Game.map[13 - getLocation().y][getLocation().x] = new CharacterCell(this);
-	    			Game.map[14 - getLocation().y][getLocation().x] = new CharacterCell(null);
-	    			setLocation(new Point(getLocation().x, getLocation().y + 1));
-	    		}
-	    		else
-	    			throw new MovementException("Character cannot move up.");
-	    	}
-	    	
-	    	if(d == Direction.DOWN){
-	    		if(getLocation().y > 0 && ((Game.map[15 - getLocation().y][getLocation().x] instanceof CharacterCell)
-	    				&& ((CharacterCell)Game.map[15- getLocation().y][getLocation().x]).getCharacter() == null)
-	    				|| !(Game.map[15 - getLocation().y][getLocation().x] instanceof CharacterCell)) {
-	    			moveHelper(Game.map[15 - getLocation().y][getLocation().x]);
-	    			Game.map[15 - getLocation().y][getLocation().x] = new CharacterCell(this);
-	    			Game.map[14 - getLocation().y][getLocation().x] = new CharacterCell(null);
-	    			setLocation(new Point(getLocation().x, getLocation().y - 1));
-	    		}
-	    		else
-	    			throw new MovementException("Character cannot move down.");
-	    	}
-	    	
-	    	if(d == Direction.LEFT) {
-	    		if(getLocation().x > 0 && ((Game.map[14 - getLocation().y][getLocation().x - 1] instanceof CharacterCell)
-	    				&& ((CharacterCell)Game.map[14 - getLocation().y][getLocation().x - 1]).getCharacter() == null)
-	    				|| !(Game.map[14 - getLocation().y][getLocation().x - 1] instanceof CharacterCell)) {
-	    			moveHelper(Game.map[14 - getLocation().y][getLocation().x - 1]);
-	    			Game.map[14 - getLocation().y][getLocation().x - 1] = new CharacterCell(this);
-	    			Game.map[14 - getLocation().y][getLocation().x] = new CharacterCell(null);
-	    			setLocation(new Point(getLocation().x - 1, getLocation().y));
-	    		}
-	    		else
-	    			throw new MovementException("Character cannot move left.");
-	    	}
-	    	
-	    	if(d == Direction.RIGHT){
-	    		if(getLocation().x < 14 && ((Game.map[14 - getLocation().y][getLocation().x + 1] instanceof CharacterCell)
-	    				&& ((CharacterCell)Game.map[14 - getLocation().y][getLocation().x + 1]).getCharacter() == null)
-	    				|| !(Game.map[14 - getLocation().y][getLocation().x + 1] instanceof CharacterCell)) {
-	    			moveHelper(Game.map[14 - getLocation().y][getLocation().x + 1]);
-	    			Game.map[14 - getLocation().y][getLocation().x + 1] = new CharacterCell(this);
-	    			Game.map[14 - getLocation().y][getLocation().x] = new CharacterCell(null);
-	    			setLocation(new Point(getLocation().x + 1, getLocation().y));
-	    		}
-	    		else
-	    			throw new MovementException("Character cannot move right.");
-	    	}
-	    	Game.updateVisibility();
-    	}
-    	else
-    		throw new NotEnoughActionsException("Character has no more available actions.");
+    	if(actionsAvailable < 1) { //Guarded Clause
+			throw new NotEnoughActionsException("Character has no more available actions.");
+		}
+		int newY =  getLocation().y;
+		int newX = getLocation().x;
+		switch (d)
+		{
+			case DOWN: 
+				newY--;
+				break;
+			case LEFT:
+				newX--;
+				break;
+			case RIGHT:
+				newX++;
+				break;
+			case UP:
+				newY++;
+				break;
+			default:
+				break;
+			
+		}
+		if (newX < 0 || newX > 14 || newY < 0 || newY > 14) //Insure Movement within Board Bounds of 15x15 interlinked
+		{
+			throw new MovementException("Movement Out of Bounds");
+		}
+		if ((Game.map[newY][newX] instanceof CharacterCell)) 
+		{
+			if (((CharacterCell)Game.map[newY][newX]).getCharacter() != null)
+			{
+				throw new MovementException("Cell is occupied");
+			}
+		} 
+		else if (!(Game.map[newY][newX] instanceof TrapCell) && !(Game.map[newY][newX] instanceof CollectibleCell))
+		{
+			throw new MovementException("Target is not a valid cell");
+		}
+		
+		moveHelper(Game.map[newY][newX]);
+		Game.map[newY][newX] = new CharacterCell(this);
+		Game.map[getLocation().y][getLocation().x] = new CharacterCell(null);
+		setLocation(new Point(newY,newX));
+		Game.updateVisibility();
+    	
+	
+    		
     }
     
-    public void moveHelper(Cell targetCell) {
+    public void moveHelper(Cell targetCell) { 
     	actionsAvailable--;
     	if(targetCell instanceof CollectibleCell) {
 			if(((CollectibleCell) targetCell).getCollectible() instanceof Vaccine)
@@ -169,7 +160,7 @@ public abstract class Hero extends Character {
     }
     
     public void useSpecial() throws NotEnoughActionsException, NoAvailableResourcesException, InvalidTargetException {
-    	if(actionsAvailable > 0) {
+    	if(actionsAvailable > 0 || this instanceof Fighter)  {
     		if(!supplyInventory.isEmpty()) {
     			actionsAvailable--;
     			supplyInventory.remove(0);
@@ -184,27 +175,33 @@ public abstract class Hero extends Character {
     }
     
     public void cure() throws NotEnoughActionsException, NoAvailableResourcesException, InvalidTargetException {
-    	if(actionsAvailable > 0) {
-    		if(getTarget() instanceof Zombie && ((getTarget().getLocation().y + 1 == getLocation().y || getTarget().getLocation().y - 1 == 
-    				getLocation().y) && getTarget().getLocation().x == getLocation().x) || ((getTarget().getLocation().x + 1 == getLocation().x ||
-    				getTarget().getLocation().x - 1 == getLocation().x) && getTarget().getLocation().y == getLocation().y)) {
-	    		if(!vaccineInventory.isEmpty()) {
-	    			actionsAvailable--;
-	    			vaccineInventory.remove(0);
-	    			int y = getTarget().getLocation().y;
-	    			int x = getTarget().getLocation().x;
-	    			int r = (int)(Math.random() * (Game.availableHeroes.size() + 1));
-	    			Game.map[14 - y][x] = new CharacterCell(Game.availableHeroes.get(r));
-	    			Game.availableHeroes.remove(r);
-	    			// safety check?
-	    			((CharacterCell)Game.map[14 - y][x]).getCharacter().setLocation(new Point(x, y));
-	    		}
-	    		else
-	    			throw new NoAvailableResourcesException("Character does not have any vaccines.");
-    		}
-    		else throw new InvalidTargetException("Can only cure zombies in adjacent cells.");
-    	}
-    	else
-    		throw new NotEnoughActionsException("Character has no more available acitons.");
-    }
+    if (getTarget() == null)
+	{
+		throw new InvalidTargetException("No Target Selected");
+	}
+	{	
+		if(actionsAvailable > 0) {
+			if(getTarget() instanceof Zombie && ((getTarget().getLocation().y + 1 == getLocation().y || getTarget().getLocation().y - 1 == 
+					getLocation().y) && getTarget().getLocation().x == getLocation().x) || ((getTarget().getLocation().x + 1 == getLocation().x ||
+					getTarget().getLocation().x - 1 == getLocation().x) && getTarget().getLocation().y == getLocation().y)) {
+				if(!vaccineInventory.isEmpty()) {
+					actionsAvailable--;
+					vaccineInventory.remove(0);
+					int y = getTarget().getLocation().y;
+					int x = getTarget().getLocation().x;
+					int r = (int)(Math.random() * (Game.availableHeroes.size() + 1));
+					Game.map[14 - y][x] = new CharacterCell(Game.availableHeroes.get(r));
+					Game.availableHeroes.remove(r);
+					// safety check?
+					((CharacterCell)Game.map[14 - y][x]).getCharacter().setLocation(new Point(x, y));
+				}
+				else
+					throw new NoAvailableResourcesException("Character does not have any vaccines.");
+			}
+			else throw new InvalidTargetException("Can only cure zombies in adjacent cells.");
+		}
+		else
+			throw new NotEnoughActionsException("Character has no more available acitons.");
+	}
+}
 }

@@ -5,6 +5,7 @@ import model.world.CharacterCell;
 import engine.Game;
 import exceptions.InvalidTargetException;
 import exceptions.NotEnoughActionsException;
+import exceptions.MovementException;
 
 //read = getters, write = setters
 //Description : A class representing the Characters available in the game. No objects of type Character can be instantiated.
@@ -29,7 +30,9 @@ public abstract class Character {
     }
 
     public void setLocation(Point location) {
+       // if ((location.getY() < 0) || (location.getY() > 14) || (location.getX())= < 0) || location.getX() > 14)  )
         this.location = location;   
+        
     }
 
     public int getCurrentHp() {
@@ -37,13 +40,17 @@ public abstract class Character {
     }
 
     public void setCurrentHp(int currentHp) {
-    	if(currentHp < 0)
+    	if(currentHp <= 0)
+        {
             this.currentHp = 0;
+            onCharacterDeath();
+        }
         else if(currentHp > maxHp)
             this.currentHp = maxHp;
         else
             this.currentHp = currentHp;
-    }
+    
+        }
 
     public Character getTarget() {
         return target;
@@ -86,7 +93,7 @@ public abstract class Character {
     		target.onCharacterDeath();
     }
     
-    public void onCharacterDeath() {
-    	Game.map[14 - location.y][location.x] = new CharacterCell(null);
+    public void onCharacterDeath() { //14 - location
+    	Game.map[ location.y][location.x] = new CharacterCell(null);
     }
 }

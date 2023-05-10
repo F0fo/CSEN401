@@ -53,9 +53,9 @@ public class Game {
         br.close();
     }
     
-    public static void startGame(Hero h) {
+    public static void startGame(Hero h) throws MovementException {
     	map = new Cell[15][15];
-    	map[14][0] = new CharacterCell(h);
+    	map[0][0] = new CharacterCell(h);
     	// safety check?
     	
     	availableHeroes.remove(h);
@@ -85,7 +85,7 @@ public class Game {
     		}
     		else {
     			Zombie z = new Zombie();
-    			z.setLocation(new Point(14 - r, c));
+    			z.setLocation(new Point(r, c));
     			map[r][c] = new CharacterCell(z);
     			((CharacterCell)map[r][c]).setSafe(false);
     			zombies.add(z);
@@ -109,7 +109,7 @@ public class Game {
     				if(((CollectibleCell)map[i][j]).getCollectible() instanceof Vaccine)
     					return false;
     			}
-    		}
+    		} 
     	}
     	if(heroes.size() < 5)
     		return false;
@@ -124,7 +124,7 @@ public class Game {
     	return heroes.isEmpty();
     }
     
-    public static void endTurn() throws NotEnoughActionsException, InvalidTargetException {
+    public static void endTurn() throws NotEnoughActionsException, InvalidTargetException, MovementException {
     	for(int i = 0; i < 15; i++) {
     		for(int j = 0; j < 15; j++) {
     			map[i][i].setVisible(false);
@@ -134,7 +134,12 @@ public class Game {
     					h.setTarget(null);
     					h.setActionsAvailable(h.getMaxActions());
     					h.setSpecialAction(false);
+						if (h.getCurrentHp() == 0) 
+						{
+							//map[i][j] = new Cell;
+						}
     				}
+					
     				if(((CharacterCell)map[i][j]).getCharacter() instanceof Zombie) {
     					if(i > 0 && ((CharacterCell)map[i - 1][j]).getCharacter() instanceof Hero){
     						((CharacterCell)map[i][j]).getCharacter().setTarget(((CharacterCell)map[i - 1][j]).getCharacter());
@@ -171,19 +176,30 @@ public class Game {
     }
     
     public static void updateVisibility() {
-    	for(int i = 0; i < 15; i++) {
+    	
+		for(int i = 0; i < 15; i++) {
     		for(int j = 0; j < 15; j++) {
-    			if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).getCharacter() instanceof Hero) {
-					map[i][j].setVisible(true);
-					if(i > 0)
-						map[i - 1][j].setVisible(true);
-					if(i < 14)
-						map[i + 1][j].setVisible(true);
-					if(j > 0)
-						map[i][j - 1].setVisible(true);
-					if(j < 14)
-						map[i][j + 1].setVisible(true);
-    			}
+				if (map[i][j] == null)
+					continue;
+				map[i][j].setVisible(false);
+			}
+		}
+		
+		for(int i = 0; i < 15; i++) {
+    		for(int j = 0; j < 15; j++) {
+				for (int n = -1; n < 2 ; n++)
+				{
+					if (i + n < 0 || i + n > 14 )
+						continue;
+					for (int m = -1; m < 2 ; m++) 
+					{
+						if (j + m < 0 || j + m > 14 )
+							continue;
+						if(map[i+n][j+m] == null)
+							continue;
+						map[i+n][m+j].setVisible(true);
+					}
+				}
     		}
     	}
     }
