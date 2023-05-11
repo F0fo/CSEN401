@@ -5,7 +5,6 @@ import model.world.CharacterCell;
 import engine.Game;
 import exceptions.InvalidTargetException;
 import exceptions.NotEnoughActionsException;
-import exceptions.MovementException;
 
 //read = getters, write = setters
 //Description : A class representing the Characters available in the game. No objects of type Character can be instantiated.
@@ -43,7 +42,7 @@ public abstract class Character {
     	if(currentHp <= 0)
         {
             this.currentHp = 0;
-            onCharacterDeath();
+            //onCharacterDeath();
         }
         else if(currentHp > maxHp)
             this.currentHp = maxHp;
@@ -76,15 +75,14 @@ public abstract class Character {
     
     
     public void attack() throws NotEnoughActionsException, InvalidTargetException {
-    	if(((target.getLocation().y + 1 == location.y || target.getLocation().y - 1 == location.y) && target.getLocation().x == location.x) 
-    			|| ((target.getLocation().x + 1 == location.x || target.getLocation().x - 1 == location.x) && target.getLocation().y == location.y)) {
+        if(Game.checkAdjacent(this, getTarget())){
 	    	target.setCurrentHp(target.getCurrentHp() - attackDmg);
 	    	target.setTarget(this);
 	    	if(target.getCurrentHp() <= 0)
 	    		target.onCharacterDeath();
-    	}
-    	else
-    		throw new InvalidTargetException("Selected target is invalid.");
+        }
+        else
+            throw new InvalidTargetException("Selected target is invalid.");
     }
     
     public void defend(Character c) {
@@ -94,6 +92,6 @@ public abstract class Character {
     }
     
     public void onCharacterDeath() { //14 - location
-    	Game.map[ location.y][location.x] = new CharacterCell(null);
+    	Game.map[location.x][location.y] = new CharacterCell(null);
     }
 }

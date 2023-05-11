@@ -2,6 +2,7 @@ package engine;
 import java.util.ArrayList;
 
 import model.characters.*;
+import model.characters.Character;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 import model.world.Cell;
@@ -87,7 +88,7 @@ public class Game {
     			Zombie z = new Zombie();
     			z.setLocation(new Point(r, c));
     			map[r][c] = new CharacterCell(z);
-    			((CharacterCell)map[r][c]).setSafe(false);
+    			//((CharacterCell)map[r][c]).setSafe(false);
     			zombies.add(z);
     		}
     	}
@@ -127,17 +128,17 @@ public class Game {
     public static void endTurn() throws NotEnoughActionsException, InvalidTargetException, MovementException {
     	for(int i = 0; i < 15; i++) {
     		for(int j = 0; j < 15; j++) {
-    			map[i][i].setVisible(false);
+    			map[i][j].setVisible(false);
     			if(map[i][j] instanceof CharacterCell) {
     				if(((CharacterCell)map[i][j]).getCharacter() instanceof Hero) {
     					Hero h = (Hero)((CharacterCell)map[i][j]).getCharacter();
     					h.setTarget(null);
     					h.setActionsAvailable(h.getMaxActions());
     					h.setSpecialAction(false);
-						if (h.getCurrentHp() == 0) 
+						/*if (h.getCurrentHp() == 0) 
 						{
 							//map[i][j] = new Cell;
-						}
+						}*/
     				}
 					
     				if(((CharacterCell)map[i][j]).getCharacter() instanceof Zombie) {
@@ -157,6 +158,7 @@ public class Game {
     						((CharacterCell)map[i][j]).getCharacter().setTarget(((CharacterCell)map[i][j + 1]).getCharacter());
     						((CharacterCell)map[i][j]).getCharacter().attack();
     					}
+						((CharacterCell)map[i][j]).getCharacter().setTarget(null);
     				}
     			}
     		}
@@ -169,13 +171,52 @@ public class Game {
         	c = (int)(Math.random() * 15);
     	}
     	Zombie z = new Zombie();
-    	z.setLocation(new Point(14 - r, c));
+    	z.setLocation(new Point(r, c));
     	Game.map[r][c] = new CharacterCell(z);
     	// check safety?
     	Game.zombies.add(z);
+
+		updateVisibility();
     }
+
+	public static void updateVisibility() {
+    	for(int i = 14; i >= 0; i--) {
+    		for(int j = 0; j < 15; j++) {
+    			if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).getCharacter() instanceof Hero) {
+					map[i][j].setVisible(true);
+					if(i > 0)
+						map[i - 1][j].setVisible(true);
+					if(i < 14)
+						map[i + 1][j].setVisible(true);
+					if(j > 0)
+						map[i][j - 1].setVisible(true);
+					if(j < 14)
+						map[i][j + 1].setVisible(true);
+
+					if(i > 0 && j > 0)
+						map[i - 1][j - 1].setVisible(true);
+					if(i < 14 && j < 14)
+						map[i + 1][j + 1].setVisible(true);
+					if(j > 0 && i < 14)
+						map[i + 1][j - 1].setVisible(true);
+					if(j < 14 && i > 0)
+						map[i - 1][j + 1].setVisible(true);
+    			}
+    		}
+    	}
+    }
+
+	public static boolean checkAdjacent(Character c1, Character c2){
+		Point l1 = c1.getLocation();
+		Point l2 = c2.getLocation();
+		if((l2.x - 1 == l1.x || l2.x + 1 == l1.x) && (l1.y == l2.y || (l2.y - 1 == l1.y || l2.y + 1 == l1.y)))
+			return true;
+		if((l2.y - 1 == l1.y || l2.y + 1 == l1.y) && (l1.x == l2.x || (l2.x - 1 == l1.x || l2.x + 1 == l1.x)))
+			return true;
+		return false;
+	}
     
-    public static void updateVisibility() {
+    /*public static void updateVisibility() {
     	
 		for(int i = 0; i < 15; i++) {
     		for(int j = 0; j < 15; j++) {
@@ -202,23 +243,24 @@ public class Game {
 				}
     		}
     	}
-    }
+    }*/
     
-   /*public static void main(String[] args) throws IOException, FileNotFoundException, MovementException {
+   public static void main(String[] args) throws IOException, FileNotFoundException, MovementException {
     	availableHeroes = new ArrayList<Hero>();
 		Game.loadHeroes("D:\\University\\Semester 4\\Computer Programming Lab\\Game\\Milestone 1\\Heroes CSV File\\Heros.csv"); // path. hmm
 		
     	startGame(availableHeroes.get(0));
+		
     	printMap();
     }
     
     public static void printMap(){
-    	for(int i = 0; i < map.length; i++){
-    		for(int j = 0; j < map[i].length; j++){
-    			if(map[i][j] == null)
+    	for(int i = 14; i >= 0; i--){
+    		for(int j = 0; j < 15; j++){
+    			/*if(map[i][j] == null)
     				System.out.print("[ ]");
     			else{
-    				if(map[i][j] instanceof CharacterCell){
+    				if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).getCharacter() != null){
     					if(((CharacterCell)map[i][j]).getCharacter() instanceof Hero)
     						System.out.print("[H]");
     					else if(((CharacterCell)map[i][j]).getCharacter() instanceof Zombie)
@@ -233,9 +275,15 @@ public class Game {
     				else if(map[i][j] instanceof TrapCell){
     					System.out.print("[T]");
     				}
-    			}
+    				else
+    					System.out.print("[ ]");
+    			}*/
+				if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).isVisible())
+					System.out.print("[V]");
+				else
+					System.out.print("[ ]");
     		}
     		System.out.println();
     	}
-    }*/
+    }
 }

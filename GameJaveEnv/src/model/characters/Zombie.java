@@ -23,7 +23,7 @@ public class Zombie extends Character {
         	c = (int)(Math.random() * 15);
     	}
     	Zombie z = new Zombie();
-    	z.setLocation(new Point(14 - r, c));
+    	z.setLocation(new Point(r, c));
     	Game.map[r][c] = new CharacterCell(z);
     	// check safety?
     	Game.zombies.add(z);

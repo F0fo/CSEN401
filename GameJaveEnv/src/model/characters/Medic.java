@@ -1,5 +1,6 @@
 package model.characters;
 
+import engine.Game;
 import exceptions.InvalidTargetException;
 import exceptions.NoAvailableResourcesException;
 import exceptions.NotEnoughActionsException;
@@ -10,14 +11,10 @@ public class Medic extends Hero {
     }
     
     public void useSpecial() throws NotEnoughActionsException, NoAvailableResourcesException, InvalidTargetException {
-    	super.useSpecial(); // do something about only being able to heal one character per supply idfk
-    	if(getTarget() instanceof Hero){
-    		if(getTarget().getCurrentHp() != getTarget().getMaxHp()) {
-    			getTarget().setCurrentHp(getMaxHp());
-    			setSpecialAction(false);
-    		}
-    		else
-    			throw new InvalidTargetException("Hero is already at max health.");
+		 // do something about only being able to heal one character per supply idfk
+    	if(getTarget() instanceof Hero && Game.checkAdjacent(this, getTarget())){
+    		getTarget().setCurrentHp(getMaxHp());
+			super.useSpecial();
     	}
     	else
     		throw new InvalidTargetException("Can only heal other heroes.");
