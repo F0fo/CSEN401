@@ -88,7 +88,6 @@ public class Game {
     			Zombie z = new Zombie();
     			z.setLocation(new Point(r, c));
     			map[r][c] = new CharacterCell(z);
-    			//((CharacterCell)map[r][c]).setSafe(false);
     			zombies.add(z);
     		}
     	}
@@ -122,7 +121,19 @@ public class Game {
     }
     
     public static boolean checkGameOver() {
-    	return heroes.isEmpty();
+    	for(int i = 0; i < 15; i++) {
+    		for(int j = 0; j < 15; j++) {
+    			if(map[i][j] instanceof CollectibleCell) {
+    				if(((CollectibleCell)map[i][j]).getCollectible() instanceof Vaccine)
+    					return false;
+    			}
+    		} 
+    	}
+    	for(int i = 0; i < heroes.size(); i++) {
+    		if(!(heroes.get(i).getVaccineInventory().isEmpty()))
+    			return false;
+    	}
+    	return true;
     }
     
     public static void endTurn() throws NotEnoughActionsException, InvalidTargetException, MovementException {
@@ -130,8 +141,10 @@ public class Game {
     		for(int j = 0; j < 15; j++) {
     			map[i][j].setVisible(false);
     			if(map[i][j] instanceof CharacterCell) {
-    				if(((CharacterCell)map[i][j]).getCharacter() instanceof Hero) {
-    					Hero h = (Hero)((CharacterCell)map[i][j]).getCharacter();
+					Character c = ((CharacterCell)map[i][j]).getCharacter();
+
+    				if(c instanceof Hero) {
+    					Hero h = (Hero)c;
     					h.setTarget(null);
     					h.setActionsAvailable(h.getMaxActions());
     					h.setSpecialAction(false);
@@ -141,24 +154,11 @@ public class Game {
 						}*/
     				}
 					
-    				if(((CharacterCell)map[i][j]).getCharacter() instanceof Zombie) {
-    					if(i > 0 && ((CharacterCell)map[i - 1][j]).getCharacter() instanceof Hero){
-    						((CharacterCell)map[i][j]).getCharacter().setTarget(((CharacterCell)map[i - 1][j]).getCharacter());
-    						((CharacterCell)map[i][j]).getCharacter().attack();
-    					}
-    					else if(i < 14 && ((CharacterCell)map[i + 1][j]).getCharacter() instanceof Hero) {
-    						((CharacterCell)map[i][j]).getCharacter().setTarget(((CharacterCell)map[i + 1][j]).getCharacter());
-    						((CharacterCell)map[i][j]).getCharacter().attack();
-    					}
-    					else if(j > 0 && ((CharacterCell)map[i][j - 1]).getCharacter() instanceof Hero) {
-    						((CharacterCell)map[i][j]).getCharacter().setTarget(((CharacterCell)map[i][j - 1]).getCharacter());
-    						((CharacterCell)map[i][j]).getCharacter().attack();
-    					}
-    					else if(j < 14 && ((CharacterCell)map[i][j + 1]).getCharacter() instanceof Hero) {
-    						((CharacterCell)map[i][j]).getCharacter().setTarget(((CharacterCell)map[i][j + 1]).getCharacter());
-    						((CharacterCell)map[i][j]).getCharacter().attack();
-    					}
-						((CharacterCell)map[i][j]).getCharacter().setTarget(null);
+    				if(c instanceof Zombie) {
+						selectTarget((Zombie)c);
+						if(c.getTarget() != null)
+							c.attack();
+						c.setTarget(null);
     				}
     			}
     		}
@@ -173,7 +173,6 @@ public class Game {
     	Zombie z = new Zombie();
     	z.setLocation(new Point(r, c));
     	Game.map[r][c] = new CharacterCell(z);
-    	// check safety?
     	Game.zombies.add(z);
 
 		updateVisibility();
@@ -215,6 +214,32 @@ public class Game {
 			return true;
 		return false;
 	}
+
+	public static void selectTarget(Zombie z) {
+    	for(int i = 14; i >= 0; i--) {
+    		for(int j = 0; j < 15; j++) {
+    			if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).getCharacter() == z) {
+					if(i > 0 && map[i - 1][j] instanceof CharacterCell && ((CharacterCell)map[i - 1][j]).getCharacter() instanceof Hero)
+						z.setTarget(((CharacterCell)map[i - 1][j]).getCharacter());
+					else if(i < 14 && map[i + 1][j] instanceof CharacterCell && ((CharacterCell)map[i + 1][j]).getCharacter() instanceof Hero)
+						z.setTarget(((CharacterCell)map[i + 1][j]).getCharacter());
+					else if(j > 0 && map[i][j - 1] instanceof CharacterCell && ((CharacterCell)map[i][j - 1]).getCharacter() instanceof Hero)
+						z.setTarget(((CharacterCell)map[i][j - 1]).getCharacter());
+					else if(j < 14 && map[i][j + 1] instanceof CharacterCell && ((CharacterCell)map[i][j + 1]).getCharacter() instanceof Hero)
+						z.setTarget(((CharacterCell)map[i][j + 1]).getCharacter());
+
+					else if(i > 0 && j > 0 && map[i - 1][j - 1] instanceof CharacterCell && ((CharacterCell)map[i - 1][j - 1]).getCharacter() instanceof Hero)
+						z.setTarget(((CharacterCell)map[i - 1][j - 1]).getCharacter());
+					else if(i < 14 && j < 14 && map[i + 1][j + 1] instanceof CharacterCell && ((CharacterCell)map[i + 1][j + 1]).getCharacter() instanceof Hero)
+						z.setTarget(((CharacterCell)map[i + 1][j + 1]).getCharacter());
+					else if(j > 0 && i < 14 && map[i + 1][j - 1] instanceof CharacterCell && ((CharacterCell)map[i + 1][j - 1]).getCharacter() instanceof Hero)
+						z.setTarget(((CharacterCell)map[i + 1][j - 1]).getCharacter());
+					else if(j < 14 && i > 0 && map[i - 1][j + 1] instanceof CharacterCell && ((CharacterCell)map[i - 1][j + 1]).getCharacter() instanceof Hero)
+						z.setTarget(((CharacterCell)map[i - 1][j + 1]).getCharacter());
+    			}
+    		}
+    	}
+    }
     
     /*public static void updateVisibility() {
     	
@@ -252,12 +277,20 @@ public class Game {
     	startGame(availableHeroes.get(0));
 		
     	printMap();
+
+		zombies.get(0).onCharacterDeath();
+
+		//System.out.println("============================");
+
+		printMap();
+
+		System.out.println(zombies.size());
     }
     
     public static void printMap(){
     	for(int i = 14; i >= 0; i--){
     		for(int j = 0; j < 15; j++){
-    			/*if(map[i][j] == null)
+    			if(map[i][j] == null)
     				System.out.print("[ ]");
     			else{
     				if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).getCharacter() != null){
@@ -277,11 +310,11 @@ public class Game {
     				}
     				else
     					System.out.print("[ ]");
-    			}*/
-				if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).isVisible())
+    			}
+				/*if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).isVisible())
 					System.out.print("[V]");
 				else
-					System.out.print("[ ]");
+					System.out.print("[ ]");*/
     		}
     		System.out.println();
     	}

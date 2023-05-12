@@ -75,9 +75,13 @@ public abstract class Character {
     
     
     public void attack() throws NotEnoughActionsException, InvalidTargetException {
+        if(this instanceof Zombie && getTarget() == null){
+            Game.selectTarget((Zombie)this);
+        }
         if(Game.checkAdjacent(this, getTarget())){
 	    	target.setCurrentHp(target.getCurrentHp() - attackDmg);
-	    	target.setTarget(this);
+            target.setTarget(this);
+	    	defend(target);
 	    	if(target.getCurrentHp() <= 0)
 	    		target.onCharacterDeath();
         }
@@ -86,12 +90,28 @@ public abstract class Character {
     }
     
     public void defend(Character c) {
-    	target.setCurrentHp(target.getCurrentHp() - (attackDmg / 2));
-    	if(target.getCurrentHp() <= 0)
-    		target.onCharacterDeath();
+    	c.target.setCurrentHp(c.target.getCurrentHp() - (c.attackDmg / 2));
+    	if(c.target.getCurrentHp() <= 0)
+    		c.target.onCharacterDeath();
     }
     
-    public void onCharacterDeath() { //14 - location
+    public void onCharacterDeath() {
     	Game.map[location.x][location.y] = new CharacterCell(null);
+        if(this instanceof Zombie){
+            Game.zombies.remove(this);
+            
+            int r = (int)(Math.random() * 15);
+            int c = (int)(Math.random() * 15);
+            while(!(Game.map[r][c] instanceof CharacterCell && ((CharacterCell)Game.map[r][c]).getCharacter() == null)) {
+                r = (int)(Math.random() * 15);
+                c = (int)(Math.random() * 15);
+            }
+            Zombie z = new Zombie();
+            z.setLocation(new Point(r, c));
+            Game.map[r][c] = new CharacterCell(z);
+            Game.zombies.add(z);
+        }
+        else
+            Game.heroes.remove(this);
     }
 }

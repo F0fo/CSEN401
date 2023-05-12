@@ -80,11 +80,11 @@ public abstract class Hero extends Character {
 			throw new InvalidTargetException("Selected target is invalid");
     }
     
-    public void onCharacterDeath() {
+    /*public void onCharacterDeath() {
     	super.onCharacterDeath();
-    	Game.heroes.remove(this);
-		Game.map[getLocation().x][getLocation().y].setVisible(true);
-    	/*Game.map[14 - getLocation().y][getLocation().x].setVisible(false);
+    	//Game.heroes.remove(this);
+		//Game.map[getLocation().x][getLocation().y].setVisible(true);
+    	Game.map[14 - getLocation().y][getLocation().x].setVisible(false);
     	if(getLocation().y < 14)
     		Game.map[13 - getLocation().y][getLocation().x].setVisible(false);
     	if(getLocation().y > 0)
@@ -92,8 +92,8 @@ public abstract class Hero extends Character {
     	if(getLocation().x > 0)
     		Game.map[14 - getLocation().y][getLocation().x - 1].setVisible(false);
     	if(getLocation().x < 14)
-    		Game.map[14 - getLocation().y][getLocation().x + 1].setVisible(false);*/
-    }
+    		Game.map[14 - getLocation().y][getLocation().x + 1].setVisible(false);
+	}*/
     
     public void move(Direction d) throws MovementException, NotEnoughActionsException{ // still need to update visibility
     	if(actionsAvailable < 1) { //Guarded Clause
@@ -119,7 +119,7 @@ public abstract class Hero extends Character {
 				break;
 			
 		}
-		if (newX < 0 || newX > 14 || newY < 0 || newY > 14) //Insure Movement within Board Bounds of 15x15 interlinked
+		if (newX < 0 || newX > 14 || newY < 0 || newY > 14) // ensure Movement within board bounds of 15x15 interlinked
 		{
 			throw new MovementException("Movement Out of Bounds");
 		}
@@ -182,19 +182,8 @@ public abstract class Hero extends Character {
 	{	
 		if(actionsAvailable > 0) {
 			if(getTarget() instanceof Zombie && Game.checkAdjacent(this, getTarget())) {
-				if(!vaccineInventory.isEmpty()) {
-					actionsAvailable--;
-					vaccineInventory.remove(0);
-					int y = getTarget().getLocation().y;
-					int x = getTarget().getLocation().x;
-					int r = (int)(Math.random() * (Game.availableHeroes.size()));
-					Game.map[x][y] = new CharacterCell(Game.availableHeroes.get(r));
-					Game.availableHeroes.remove(r);
-					// safety check?
-					((CharacterCell)Game.map[x][y]).getCharacter().setLocation(new Point(x, y));
-				}
-				else
-					throw new NoAvailableResourcesException("Character does not have any vaccines.");
+				actionsAvailable--;
+				vaccineInventory.get(0).use(this);
 			}
 			else throw new InvalidTargetException("Can only cure zombies in adjacent cells.");
 		}
