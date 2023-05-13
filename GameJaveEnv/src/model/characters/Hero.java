@@ -80,20 +80,10 @@ public abstract class Hero extends Character {
 			throw new InvalidTargetException("Selected target is invalid");
     }
     
-    /*public void onCharacterDeath() {
+    public void onCharacterDeath() {
     	super.onCharacterDeath();
-    	//Game.heroes.remove(this);
-		//Game.map[getLocation().x][getLocation().y].setVisible(true);
-    	Game.map[14 - getLocation().y][getLocation().x].setVisible(false);
-    	if(getLocation().y < 14)
-    		Game.map[13 - getLocation().y][getLocation().x].setVisible(false);
-    	if(getLocation().y > 0)
-    		Game.map[15 - getLocation().y][getLocation().x].setVisible(false);
-    	if(getLocation().x > 0)
-    		Game.map[14 - getLocation().y][getLocation().x - 1].setVisible(false);
-    	if(getLocation().x < 14)
-    		Game.map[14 - getLocation().y][getLocation().x + 1].setVisible(false);
-	}*/
+    	Game.heroes.remove(this);
+	}
     
     public void move(Direction d) throws MovementException, NotEnoughActionsException{ // still need to update visibility
     	if(actionsAvailable < 1) { //Guarded Clause

@@ -55,7 +55,7 @@ public class Game {
     }
     
     public static void startGame(Hero h) throws MovementException {
-    	map = new Cell[15][15];
+		map = new Cell[15][15];
     	map[0][0] = new CharacterCell(h);
     	// safety check?
     	
@@ -152,16 +152,7 @@ public class Game {
 			z.setTarget(null);
     	}
     	
-    	int r = (int)(Math.random() * 15);
-    	int c = (int)(Math.random() * 15);
-    	while(!(Game.map[r][c] instanceof CharacterCell && ((CharacterCell)Game.map[r][c]).getCharacter() == null)) {
-    		r = (int)(Math.random() * 15);
-        	c = (int)(Math.random() * 15);
-    	}
-    	Zombie z = new Zombie();
-    	z.setLocation(new Point(r, c));
-    	Game.map[r][c] = new CharacterCell(z);
-    	Game.zombies.add(z);
+    	spawnZombie();
 
 		updateVisibility();
     }
@@ -218,6 +209,19 @@ public class Game {
 		}
 		z.setTarget(null);
     }
+
+	public static void spawnZombie(){
+		int r = (int)(Math.random() * 15);
+    	int c = (int)(Math.random() * 15);
+    	while(!(Game.map[r][c] instanceof CharacterCell && ((CharacterCell)Game.map[r][c]).getCharacter() == null)) {
+    		r = (int)(Math.random() * 15);
+        	c = (int)(Math.random() * 15);
+    	}
+    	Zombie z = new Zombie();
+    	z.setLocation(new Point(r, c));
+    	Game.map[r][c] = new CharacterCell(z);
+    	Game.zombies.add(z);
+	}
     
     /*public static void updateVisibility() {
     	
