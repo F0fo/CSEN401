@@ -12,8 +12,6 @@ public class Zombie extends Character {
     }
     
     public void onCharacterDeath() {
-    	super.onCharacterDeath();
-		Game.zombies.remove(this);
-		Game.spawnZombie();
+    	
     }
 }
