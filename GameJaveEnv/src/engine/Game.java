@@ -24,7 +24,7 @@ public class Game {
     public static ArrayList<Hero> availableHeroes;
     public static ArrayList<Hero> heroes;
     public static ArrayList<Zombie> zombies;
-    public static Cell[][] map;
+    public static Cell[][] map = new Cell[15][15];
 
     public static void loadHeroes(String filePath) throws IOException, FileNotFoundException {
         FileReader fr = new FileReader(filePath);
@@ -55,8 +55,14 @@ public class Game {
     }
     
     public static void startGame(Hero h) throws MovementException {
-    	map = new Cell[15][15];
-    	map[0][0] = new CharacterCell(h);
+
+		for(int i = 0; i < 15; i++) {
+			for(int j = 0; j < 15; j++) {
+				map[i][j] = null;
+			}
+		}
+		map[0][0]=new CharacterCell(h);
+
     	// safety check?
     	
     	availableHeroes.remove(h);
@@ -151,47 +157,10 @@ public class Game {
 				z.attack();
 			z.setTarget(null);
     	}
-
-
-    	int r = (int)(Math.random() * 15);
-    	int c = (int)(Math.random() * 15);
-    	while(!(Game.map[r][c] instanceof CharacterCell && ((CharacterCell)Game.map[r][c]).getCharacter() == null)) {
-    		r = (int)(Math.random() * 15);
-        	c = (int)(Math.random() * 15);
-    	}
-    	Zombie z = new Zombie();
-    	z.setLocation(new Point(r, c));
-    	Game.map[r][c] = new CharacterCell(z);
-    	Game.zombies.add(z);
+    	
+    	spawnZombie();
 
 		updateVisibility();
-    }
-
-	public static void updateVisibility() {
-    	for(int i = 14; i >= 0; i--) {
-    		for(int j = 0; j < 15; j++) {
-    			if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).getCharacter() instanceof Hero) {
-					map[i][j].setVisible(true);
-					if(i > 0)
-						map[i - 1][j].setVisible(true);
-					if(i < 14)
-						map[i + 1][j].setVisible(true);
-					if(j > 0)
-						map[i][j - 1].setVisible(true);
-					if(j < 14)
-						map[i][j + 1].setVisible(true);
-
-					if(i > 0 && j > 0)
-						map[i - 1][j - 1].setVisible(true);
-					if(i < 14 && j < 14)
-						map[i + 1][j + 1].setVisible(true);
-					if(j > 0 && i < 14)
-						map[i + 1][j - 1].setVisible(true);
-					if(j < 14 && i > 0)
-						map[i - 1][j + 1].setVisible(true);
-    			}
-    		}
-    	}
     }
 
 	public static boolean checkAdjacent(Character c1, Character c2){
@@ -219,17 +188,21 @@ public class Game {
 		}
 		z.setTarget(null);
     }
+
+	public static void spawnZombie(){
+		int r = (int)(Math.random() * 15);
+    	int c = (int)(Math.random() * 15);
+    	while(!(Game.map[r][c] instanceof CharacterCell && ((CharacterCell)Game.map[r][c]).getCharacter() == null)) {
+    		r = (int)(Math.random() * 15);
+        	c = (int)(Math.random() * 15);
+    	}
+    	Zombie z = new Zombie();
+    	z.setLocation(new Point(r, c));
+    	Game.map[r][c] = new CharacterCell(z);
+    	Game.zombies.add(z);
+	}
     
-    /*public static void updateVisibility() {
-    	
-		for(int i = 0; i < 15; i++) {
-    		for(int j = 0; j < 15; j++) {
-				if (map[i][j] == null)
-					continue;
-				map[i][j].setVisible(false);
-			}
-		}
-		
+    public static void updateVisibility() {
 		for(int i = 0; i < 15; i++) {
     		for(int j = 0; j < 15; j++) {
 				for (int n = -1; n < 2 ; n++)
@@ -240,14 +213,14 @@ public class Game {
 					{
 						if (j + m < 0 || j + m > 14 )
 							continue;
-						if(map[i+n][j+m] == null)
+						if(!(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).getCharacter() instanceof Hero))
 							continue;
 						map[i+n][m+j].setVisible(true);
 					}
 				}
     		}
     	}
-    }*/
+    }
     
    public static void main(String[] args) throws IOException, FileNotFoundException, MovementException {
     	availableHeroes = new ArrayList<Hero>();
@@ -255,18 +228,18 @@ public class Game {
 		
     	startGame(availableHeroes.get(0));
 		
-    	printMap();
+    	printMap(map);
 
 		zombies.get(0).onCharacterDeath();
 
 		//System.out.println("============================");
 
-		printMap();
+		printMap(map);
 
 		System.out.println(zombies.size());
     }
     
-    public static void printMap(){
+    public static void printMap(Cell[][] map){
     	for(int i = 14; i >= 0; i--){
     		for(int j = 0; j < 15; j++){
     			if(map[i][j] == null)
@@ -295,6 +268,7 @@ public class Game {
 				else
 					System.out.print("[ ]");*/
     		}
+			System.out.print(i);
     		System.out.println();
     	}
     }

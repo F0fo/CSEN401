@@ -70,6 +70,7 @@ public abstract class Hero extends Character {
 			if(this instanceof Fighter && specialAction ) {
 				//System.out.println("FIGHTER ATTACK HEREEEEEEEEEEEEEEEEEEEEE");
 				super.attack();
+				return;
 			}
 			else if(actionsAvailable > 0){
 					super.attack();
@@ -82,20 +83,21 @@ public abstract class Hero extends Character {
 			throw new InvalidTargetException("Selected target is invalid");
     }
     
-    /*public void onCharacterDeath() {
+    public void onCharacterDeath() {
     	super.onCharacterDeath();
-     	//Game.heroes.remove(this);
-		//Game.map[getLocation().x][getLocation().y].setVisible(true);
-    	Game.map[14 - getLocation().y][getLocation().x].setVisible(false);
-    	if(getLocation().y < 14)
-    		Game.map[13 - getLocation().y][getLocation().x].setVisible(false);
-    	if(getLocation().y > 0)
-    		Game.map[15 - getLocation().y][getLocation().x].setVisible(false);
-    	if(getLocation().x > 0)
-    		Game.map[14 - getLocation().y][getLocation().x - 1].setVisible(false);
-    	if(getLocation().x < 14)
-    		Game.map[14 - getLocation().y][getLocation().x + 1].setVisible(false);
-	}*/
+		Game.heroes.remove(this);
+
+		int x = getLocation().x;
+		int y = getLocation().y;
+		for(int i = x - 1; i <= x + 1; i++){
+			for(int j = y - 1; j <= y + 1; j++){
+				if(i >= 0 && i < 15 && j >= 0 && j < 15){
+					Game.map[i][j].setVisible(false);
+				}
+			}
+		}
+		Game.updateVisibility();
+	}
     
     public void move(Direction d) throws MovementException, NotEnoughActionsException{ // still need to update visibility
     	if(actionsAvailable < 1) { //Guarded Clause
@@ -161,18 +163,13 @@ public abstract class Hero extends Character {
 		}
     }
     
-    public void useSpecial() throws NotEnoughActionsException, NoAvailableResourcesException, InvalidTargetException {
-    	if(actionsAvailable > 0 || this instanceof Fighter)  {
+    public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException {
     		if(!supplyInventory.isEmpty()) {
-    			actionsAvailable--;
-    			supplyInventory.remove(0);
+    			supplyInventory.get(0).use(this);
     			specialAction = true;
     		}
     		else
     			throw new NoAvailableResourcesException("Character does not have any supplies.");
-    	}
-    	else
-    		throw new NotEnoughActionsException("Character has no more available actions.");
     		
     }
     
@@ -186,6 +183,7 @@ public abstract class Hero extends Character {
 			if(getTarget() instanceof Zombie && Game.checkAdjacent(this, getTarget())) {
 				actionsAvailable--;
 				vaccineInventory.get(0).use(this);
+				//Game.updateVisibility();
 			}
 			else throw new InvalidTargetException("Can only cure zombies in adjacent cells.");
 		}
