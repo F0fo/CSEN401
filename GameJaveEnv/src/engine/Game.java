@@ -137,31 +137,19 @@ public class Game {
     }
     
     public static void endTurn() throws NotEnoughActionsException, InvalidTargetException, MovementException {
-    	for(int i = 0; i < 15; i++) {
-    		for(int j = 0; j < 15; j++) {
-    			map[i][j].setVisible(false);
-    			if(map[i][j] instanceof CharacterCell) {
-					Character c = ((CharacterCell)map[i][j]).getCharacter();
+		for(int i = 0; i < heroes.size(); i++){
+			Hero h = heroes.get(i);
+			h.setTarget(null);
+			h.setActionsAvailable(h.getMaxActions());
+			h.setSpecialAction(false);
+		}
 
-    				if(c instanceof Hero) {
-    					Hero h = (Hero)c;
-    					h.setTarget(null);
-    					h.setActionsAvailable(h.getMaxActions());
-    					h.setSpecialAction(false);
-						/*if (h.getCurrentHp() == 0) 
-						{
-							//map[i][j] = new Cell;
-						}*/
-    				}
-					
-    				if(c instanceof Zombie) {
-						selectTarget((Zombie)c);
-						if(c.getTarget() != null)
-							c.attack();
-						c.setTarget(null);
-    				} 
-    			}
-    		}
+		for(int i = 0; i < zombies.size(); i++){
+			Zombie z = zombies.get(i);
+			selectTarget(z);
+			if(z.getTarget() != null)
+				z.attack();
+			z.setTarget(null);
     	}
 
 
@@ -217,29 +205,19 @@ public class Game {
 	}
 
 	public static void selectTarget(Zombie z) {
-    	for(int i = 14; i >= 0; i--) {
-    		for(int j = 0; j < 15; j++) {
-    			if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).getCharacter() == z) {
-					if(i > 0 && map[i - 1][j] instanceof CharacterCell && ((CharacterCell)map[i - 1][j]).getCharacter() instanceof Hero)
-						z.setTarget(((CharacterCell)map[i - 1][j]).getCharacter());
-					else if(i < 14 && map[i + 1][j] instanceof CharacterCell && ((CharacterCell)map[i + 1][j]).getCharacter() instanceof Hero)
-						z.setTarget(((CharacterCell)map[i + 1][j]).getCharacter());
-					else if(j > 0 && map[i][j - 1] instanceof CharacterCell && ((CharacterCell)map[i][j - 1]).getCharacter() instanceof Hero)
-						z.setTarget(((CharacterCell)map[i][j - 1]).getCharacter());
-					else if(j < 14 && map[i][j + 1] instanceof CharacterCell && ((CharacterCell)map[i][j + 1]).getCharacter() instanceof Hero)
-						z.setTarget(((CharacterCell)map[i][j + 1]).getCharacter());
-
-					else if(i > 0 && j > 0 && map[i - 1][j - 1] instanceof CharacterCell && ((CharacterCell)map[i - 1][j - 1]).getCharacter() instanceof Hero)
-						z.setTarget(((CharacterCell)map[i - 1][j - 1]).getCharacter());
-					else if(i < 14 && j < 14 && map[i + 1][j + 1] instanceof CharacterCell && ((CharacterCell)map[i + 1][j + 1]).getCharacter() instanceof Hero)
-						z.setTarget(((CharacterCell)map[i + 1][j + 1]).getCharacter());
-					else if(j > 0 && i < 14 && map[i + 1][j - 1] instanceof CharacterCell && ((CharacterCell)map[i + 1][j - 1]).getCharacter() instanceof Hero)
-						z.setTarget(((CharacterCell)map[i + 1][j - 1]).getCharacter());
-					else if(j < 14 && i > 0 && map[i - 1][j + 1] instanceof CharacterCell && ((CharacterCell)map[i - 1][j + 1]).getCharacter() instanceof Hero)
-						z.setTarget(((CharacterCell)map[i - 1][j + 1]).getCharacter());
-    			}
-    		}
-    	}
+		int x = z.getLocation().x;
+		int y = z.getLocation().y;
+		for(int i = x - 1; i <= x + 1; i++){
+			for(int j = y - 1; j <= y + 1; j++){
+				if(i >= 0 && i < 15 && j >= 0 && j < 15){
+					if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).getCharacter() instanceof Hero){
+						z.setTarget(((CharacterCell)map[i][j]).getCharacter());
+						return;
+					}
+				}
+			}
+		}
+		z.setTarget(null);
     }
     
     /*public static void updateVisibility() {
