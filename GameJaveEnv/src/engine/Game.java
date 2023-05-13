@@ -22,8 +22,8 @@ import exceptions.NotEnoughActionsException;
    
 public class Game {
     public static ArrayList<Hero> availableHeroes;
-    public static ArrayList<Hero> heroes;
-    public static ArrayList<Zombie> zombies;
+    public static ArrayList<Hero> heroes = new ArrayList<Hero>();
+    public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
     public static Cell[][] map = new Cell[15][15];
 
     public static void loadHeroes(String filePath) throws IOException, FileNotFoundException {
@@ -66,11 +66,11 @@ public class Game {
     	// safety check?
     	
     	availableHeroes.remove(h);
-    	heroes = new ArrayList<Hero>();
+    	//heroes = new ArrayList<Hero>();
     	heroes.add(h);
     	h.setLocation(new Point(0, 0));
     	
-    	zombies = new ArrayList<Zombie>();
+    	//zombies = new ArrayList<Zombie>();
     	
     	for(int i = 0; i < 25; i++) {
     		int r = (int)(Math.random() * 15);

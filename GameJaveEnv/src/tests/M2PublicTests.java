@@ -2244,13 +2244,11 @@ public class M2PublicTests {
 			fail(e.getCause().getClass() + " occurred while trying to get Map variable from the Game Class");
 		}
 
-
 		Method attackMethod = characterClass.getMethod("attack");
 		attackMethod.invoke(character1);
 
 		boolean isDead = ((CharacterCell) tmpMap[1][1]).getCharacter() == null;
 		isDead = isDead && !((ArrayList<Zombie>) zombieField.get(gameClass)).contains(character2);
-
 		assertEquals("The Zombie is considered dead if it nolonger exists on the map and in the Zombies array ", isDead,
 				true);
 	}
@@ -2363,7 +2361,7 @@ public class M2PublicTests {
 	}
 
 	@Test(timeout = 1000)
-	public void testFighterSpecialActionOne() throws ClassNotFoundException, NoSuchMethodException,
+	public void testFighterSpecialActionOe() throws ClassNotFoundException, NoSuchMethodException,
 			IllegalAccessException, InstantiationException, InvocationTargetException {
 
 		int maxHp = (int) (Math.random() * 100) + 10;
