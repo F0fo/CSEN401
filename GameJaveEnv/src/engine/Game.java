@@ -24,7 +24,7 @@ public class Game {
     public static ArrayList<Hero> availableHeroes;
     public static ArrayList<Hero> heroes;
     public static ArrayList<Zombie> zombies;
-    public static Cell[][] map;
+    public static Cell[][] map = new Cell[15][15];
 
     public static void loadHeroes(String filePath) throws IOException, FileNotFoundException {
         FileReader fr = new FileReader(filePath);
@@ -55,8 +55,14 @@ public class Game {
     }
     
     public static void startGame(Hero h) throws MovementException {
-		map = new Cell[15][15];
-    	map[0][0] = new CharacterCell(h);
+
+		for(int i = 0; i < 15; i++) {
+			for(int j = 0; j < 15; j++) {
+				map[i][j] = null;
+			}
+		}
+		map[0][0]=new CharacterCell(h);
+
     	// safety check?
     	
     	availableHeroes.remove(h);
