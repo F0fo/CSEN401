@@ -84,7 +84,7 @@ public abstract class Hero extends Character {
     
     /*public void onCharacterDeath() {
     	super.onCharacterDeath();
-    	//Game.heroes.remove(this);
+     	//Game.heroes.remove(this);
 		//Game.map[getLocation().x][getLocation().y].setVisible(true);
     	Game.map[14 - getLocation().y][getLocation().x].setVisible(false);
     	if(getLocation().y < 14)

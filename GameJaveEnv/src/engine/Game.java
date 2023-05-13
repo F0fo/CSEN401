@@ -91,7 +91,7 @@ public class Game {
     			zombies.add(z);
     		}
     	}
-    	
+     	
     	for(int i = 0; i < 15; i++) {
     		for(int j = 0; j < 15; j++) {
     			if(map[i][j] == null)
