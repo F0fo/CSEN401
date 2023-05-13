@@ -77,13 +77,17 @@ public abstract class Character {
     public void attack() throws NotEnoughActionsException, InvalidTargetException {
         if(this instanceof Zombie && getTarget() == null){
             Game.selectTarget((Zombie)this);
+            System.out.println("target selected as a zombie");
         }
         if(Game.checkAdjacent(this, getTarget())){
+
 	    	target.setCurrentHp(target.getCurrentHp() - attackDmg);
             target.setTarget(this);
 	    	defend(target);
 	    	if(target.getCurrentHp() <= 0)
+            {
 	    		target.onCharacterDeath();
+            }
         }
         else
             throw new InvalidTargetException("Selected target is invalid.");
@@ -91,8 +95,13 @@ public abstract class Character {
     
     public void defend(Character c) {
     	c.target.setCurrentHp(c.target.getCurrentHp() - (c.attackDmg / 2));
+
+
     	if(c.target.getCurrentHp() <= 0)
+        {   
     		c.target.onCharacterDeath();
+            
+        }
     }
     
     public void onCharacterDeath() {

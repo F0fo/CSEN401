@@ -159,11 +159,12 @@ public class Game {
 						if(c.getTarget() != null)
 							c.attack();
 						c.setTarget(null);
-    				}
+    				} 
     			}
     		}
     	}
-    	
+
+
     	int r = (int)(Math.random() * 15);
     	int c = (int)(Math.random() * 15);
     	while(!(Game.map[r][c] instanceof CharacterCell && ((CharacterCell)Game.map[r][c]).getCharacter() == null)) {
