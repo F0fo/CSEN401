@@ -13,6 +13,8 @@ public class Supply implements Collectible {
 	}
 
 	public void use(Hero h) throws NoAvailableResourcesException {
-		
+		if(h.getSupplyInventory().size() <= 0)
+			throw new NoAvailableResourcesException("No available supplies");
+		h.getSupplyInventory().remove(this);
 	}
 }

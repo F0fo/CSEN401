@@ -73,14 +73,28 @@ public abstract class Character {
     
     
     public void attack() throws NotEnoughActionsException, InvalidTargetException {
-        
+        if(target != null && (Game.checkAdjacent(this, target))){
+            target.setCurrentHp(target.getCurrentHp() - attackDmg);
+            target.setTarget(this);
+            defend(target);
+            if(currentHp <= 0){
+                onCharacterDeath();
+                target = null;
+            }
+        }
+        else
+            throw new InvalidTargetException("Selected target is invalid");
     }
     
     public void defend(Character c) {
-    	
+    	c.target.setCurrentHp(c.target.getCurrentHp() - (c.attackDmg / 2));
+        if(c.target.getCurrentHp() <= 0){
+            c.target.onCharacterDeath();
+            c.setTarget(null);
+        }
     }
     
     public void onCharacterDeath() {
-    	
+    	((CharacterCell)(Game.map[location.x][location.y])).setCharacter(null);
     }
 }
