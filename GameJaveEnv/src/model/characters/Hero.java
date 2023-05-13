@@ -68,6 +68,7 @@ public abstract class Hero extends Character {
 		if(getTarget() instanceof Zombie){
 			if(this instanceof Fighter && specialAction) {
 				super.attack();
+				return;
 			}
 			else if(actionsAvailable > 0){
 					super.attack();
@@ -82,7 +83,18 @@ public abstract class Hero extends Character {
     
     public void onCharacterDeath() {
     	super.onCharacterDeath();
-    	Game.heroes.remove(this);
+		Game.heroes.remove(this);
+
+		int x = getLocation().x;
+		int y = getLocation().y;
+		for(int i = x - 1; i <= x + 1; i++){
+			for(int j = y - 1; j <= y + 1; j++){
+				if(i >= 0 && i < 15 && j >= 0 && j < 15){
+					Game.map[i][j].setVisible(false);
+				}
+			}
+		}
+		Game.updateVisibility();
 	}
     
     public void move(Direction d) throws MovementException, NotEnoughActionsException{ // still need to update visibility
@@ -149,18 +161,13 @@ public abstract class Hero extends Character {
 		}
     }
     
-    public void useSpecial() throws NotEnoughActionsException, NoAvailableResourcesException, InvalidTargetException {
-    	if(actionsAvailable > 0 || this instanceof Fighter)  {
+    public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException {
     		if(!supplyInventory.isEmpty()) {
-    			actionsAvailable--;
-    			supplyInventory.remove(0);
+    			supplyInventory.get(0).use(this);
     			specialAction = true;
     		}
     		else
     			throw new NoAvailableResourcesException("Character does not have any supplies.");
-    	}
-    	else
-    		throw new NotEnoughActionsException("Character has no more available actions.");
     		
     }
     
@@ -174,6 +181,7 @@ public abstract class Hero extends Character {
 			if(getTarget() instanceof Zombie && Game.checkAdjacent(this, getTarget())) {
 				actionsAvailable--;
 				vaccineInventory.get(0).use(this);
+				//Game.updateVisibility();
 			}
 			else throw new InvalidTargetException("Can only cure zombies in adjacent cells.");
 		}

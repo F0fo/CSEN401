@@ -75,7 +75,7 @@ public abstract class Character {
     
     
     public void attack() throws NotEnoughActionsException, InvalidTargetException {
-        if(this instanceof Zombie && getTarget() == null){
+        if(this instanceof Zombie){
             Game.selectTarget((Zombie)this);
         }
         if(Game.checkAdjacent(this, getTarget())){
@@ -96,6 +96,6 @@ public abstract class Character {
     }
     
     public void onCharacterDeath() {
-    	Game.map[location.x][location.y] = new CharacterCell(null);
+    	((CharacterCell)Game.map[location.x][location.y]).setCharacter(null);
     }
 }
