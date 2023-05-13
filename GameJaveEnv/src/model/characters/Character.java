@@ -29,7 +29,6 @@ public abstract class Character {
     }
 
     public void setLocation(Point location) {
-       // if ((location.getY() < 0) || (location.getY() > 14) || (location.getX())= < 0) || location.getX() > 14)  )
         this.location = location;   
         
     }
@@ -42,7 +41,6 @@ public abstract class Character {
     	if(currentHp <= 0)
         {
             this.currentHp = 0;
-            //onCharacterDeath();
         }
         else if(currentHp > maxHp)
             this.currentHp = maxHp;
@@ -75,27 +73,14 @@ public abstract class Character {
     
     
     public void attack() throws NotEnoughActionsException, InvalidTargetException {
-        if(this instanceof Zombie && getTarget() == null){
-            Game.selectTarget((Zombie)this);
-        }
-        if(Game.checkAdjacent(this, getTarget())){
-	    	target.setCurrentHp(target.getCurrentHp() - attackDmg);
-            target.setTarget(this);
-	    	defend(target);
-	    	if(target.getCurrentHp() <= 0)
-	    		target.onCharacterDeath();
-        }
-        else
-            throw new InvalidTargetException("Selected target is invalid.");
+        
     }
     
     public void defend(Character c) {
-    	c.target.setCurrentHp(c.target.getCurrentHp() - (c.attackDmg / 2));
-    	if(c.target.getCurrentHp() <= 0)
-    		c.target.onCharacterDeath();
+    	
     }
     
     public void onCharacterDeath() {
-    	Game.map[location.x][location.y] = new CharacterCell(null);
+    	
     }
 }

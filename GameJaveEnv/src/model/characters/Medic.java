@@ -11,13 +11,7 @@ public class Medic extends Hero {
     }
     
     public void useSpecial() throws NotEnoughActionsException, NoAvailableResourcesException, InvalidTargetException {
-		 // do something about only being able to heal one character per supply idfk
-    	if(getTarget() instanceof Hero && Game.checkAdjacent(this, getTarget())){
-    		getTarget().setCurrentHp(getMaxHp());
-			super.useSpecial();
-    	}
-    	else
-    		throw new InvalidTargetException("Can only heal other heroes.");
+		
     }
     
 }
