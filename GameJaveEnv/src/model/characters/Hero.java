@@ -92,6 +92,7 @@ public abstract class Hero extends Character {
 		for(int i = x - 1; i <= x + 1; i++){
 			for(int j = y - 1; j <= y + 1; j++){
 				if(i >= 0 && i < 15 && j >= 0 && j < 15){
+					if ((Cell) Game.map[i][j] != null)
 					Game.map[i][j].setVisible(false);
 				}
 			}

@@ -2361,7 +2361,7 @@ public class M2PublicTests {
 	}
 
 	@Test(timeout = 1000)
-	public void testFighterSpecialActionOe() throws ClassNotFoundException, NoSuchMethodException,
+	public void testFighterSpecialActionOne() throws ClassNotFoundException, NoSuchMethodException,
 			IllegalAccessException, InstantiationException, InvocationTargetException {
 
 		int maxHp = (int) (Math.random() * 100) + 10;
