@@ -19,7 +19,9 @@ import java.io.IOException;
 import exceptions.InvalidTargetException;
 import exceptions.MovementException;
 import exceptions.NotEnoughActionsException;
-   
+
+// test push from IntelliJ
+
 public class Game {
     public static ArrayList<Hero> availableHeroes;
     public static ArrayList<Hero> heroes = new ArrayList<Hero>();
