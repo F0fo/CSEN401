@@ -20,7 +20,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import model.characters.Explorer;
 import model.characters.Fighter;
@@ -32,7 +31,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     private ImageView[] charImgViews = new ImageView[8];
     private ImageView[] charImgViewsBorder = new ImageView[8];
     public Label statsLabel = new Label();
-    private ArrayList<Hero> AH = Game.availableHeroes;
+    private ArrayList<Hero> AH;
     private String t;
 
     public static void main(String[] args) {
@@ -184,12 +183,12 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         charSelectRoot.getChildren().add(selectCharLabel);
         selectCharLabel.setTranslateX(-530); selectCharLabel.setTranslateY(-300);
 
-        // loading heroes from csv and adding stats label
+        // loading heroes from csv
         Game.loadHeroes("Resources/Other/Heros.csv");
+        AH = Game.availableHeroes;
         charSelectRoot.getChildren().add(statsLabel);
-        statsLabel.setTextAlignment(TextAlignment.CENTER);
         statsLabel.setId("stats");
-        statsLabel.setTranslateX(530);
+        statsLabel.setTranslateX(530); statsLabel.setTranslateY(0);
         
         // ------------------------------------------------------------------------------------------------------
 
@@ -203,7 +202,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[0]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[0].setGraphic(charImgViewsBorder[0]);
-                statsLabel.setText("Name: Joel Miller\nType: Fighter\nMaxHP: 140\nMax Actions: 5\nAttackDamage: 30");
+                statsLabel.setText("Name: " + AH.get(0).getName() + "\nType: " + AH.get(0).getClass().getSimpleName() + 
+                "\nMax HP: " + AH.get(0).getMaxHp() + "\nMax Actions: " + AH.get(0).getMaxActions() + "\nAttack Damage: " 
+                + AH.get(0).getAttackDmg());
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_EXITED) {
                 charButtons[0].setGraphic(charImgViews[0]);
@@ -216,7 +217,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[1]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[1].setGraphic(charImgViewsBorder[1]);
-                statsLabel.setText("Name: Ellie Williams\nType: Medic\nMaxHP: 110\nMax Actions: 6\nAttackDamage: 15");
+                statsLabel.setText("Name: " + AH.get(1).getName() + "\nType: " + AH.get(1).getClass().getSimpleName() + 
+                "\nMax HP: " + AH.get(1).getMaxHp() + "\nMax Actions: " + AH.get(1).getMaxActions() + "\nAttack Damage: " 
+                + AH.get(1).getAttackDmg());
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_EXITED) {
                 charButtons[1].setGraphic(charImgViews[1]);
@@ -229,7 +232,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[2]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[2].setGraphic(charImgViewsBorder[2]);
-                statsLabel.setText("Name: Tess\nType: Explorer\nMaxHP: 80\nMax Actions: 6\nAttackDamage: 20");
+                statsLabel.setText("Name: " + AH.get(2).getName() + "\nType: " + AH.get(2).getClass().getSimpleName() + 
+                "\nMax HP: " + AH.get(2).getMaxHp() + "\nMax Actions: " + AH.get(2).getMaxActions() + "\nAttack Damage: " 
+                + AH.get(2).getAttackDmg());
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_EXITED) {
                 charButtons[2].setGraphic(charImgViews[2]);
@@ -242,7 +247,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[3]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[3].setGraphic(charImgViewsBorder[3]);
-                statsLabel.setText("Name: Riley Abel\nType: Explorer\nMaxHP: 90\nMax Actions: 5\nAttackDamage: 25");
+                statsLabel.setText("Name: " + AH.get(3).getName() + "\nType: " + AH.get(3).getClass().getSimpleName() + 
+                "\nMax HP: " + AH.get(3).getMaxHp() + "\nMax Actions: " + AH.get(3).getMaxActions() + "\nAttack Damage: " 
+                + AH.get(3).getAttackDmg());
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_EXITED) {
                 charButtons[3].setGraphic(charImgViews[3]);
@@ -255,7 +262,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[4]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[4].setGraphic(charImgViewsBorder[4]);
-                statsLabel.setText("Name: Tommy Miller\nType: Explorer\nMaxHP: 95\nMax Actions: 5\nAttackDamage: 25");
+                statsLabel.setText("Name: " + AH.get(4).getName() + "\nType: " + AH.get(4).getClass().getSimpleName() + 
+                "\nMax HP: " + AH.get(4).getMaxHp() + "\nMax Actions: " + AH.get(4).getMaxActions() + "\nAttack Damage: " 
+                + AH.get(4).getAttackDmg());
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_EXITED) {
                 charButtons[4].setGraphic(charImgViews[4]);
@@ -268,7 +277,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[5]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[5].setGraphic(charImgViewsBorder[5]);
-                statsLabel.setText("Name: Bill\nType: Medic\nMaxHP: 100\nMax Actions: 7\nAttackDamage: 10");
+                statsLabel.setText("Name: " + AH.get(5).getName() + "\nType: " + AH.get(5).getClass().getSimpleName() + 
+                "\nMax HP: " + AH.get(5).getMaxHp() + "\nMax Actions: " + AH.get(5).getMaxActions() + "\nAttack Damage: " 
+                + AH.get(5).getAttackDmg());
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_EXITED) {
                 charButtons[5].setGraphic(charImgViews[5]);
@@ -281,7 +292,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[6]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[6].setGraphic(charImgViewsBorder[6]);
-                statsLabel.setText("Name: David\nType: Fighter\nMaxHP: 150\nMax Actions: 4\nAttackDamage: 35");
+                statsLabel.setText("Name: " + AH.get(6).getName() + "\nType: " + AH.get(6).getClass().getSimpleName() + 
+                "\nMax HP: " + AH.get(6).getMaxHp() + "\nMax Actions: " + AH.get(6).getMaxActions() + "\nAttack Damage: " 
+                + AH.get(6).getAttackDmg());
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_EXITED) {
                 charButtons[6].setGraphic(charImgViews[6]);
@@ -294,7 +307,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[7]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[7].setGraphic(charImgViewsBorder[7]);
-                statsLabel.setText("Name: Henry Burell\nType: Medic\nMaxHP: 105\nMax Actions: 6\nAttackDamage: 15");
+                statsLabel.setText("Name: " + AH.get(7).getName() + "\nType: " + AH.get(7).getClass().getSimpleName() + 
+                "\nMax HP: " + AH.get(7).getMaxHp() + "\nMax Actions: " + AH.get(7).getMaxActions() + "\nAttack Damage: " 
+                + AH.get(7).getAttackDmg());
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_EXITED) {
                 charButtons[7].setGraphic(charImgViews[7]);

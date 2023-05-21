@@ -10,6 +10,7 @@
 
 #stats{
     -fx-font-size: 50;
+    -fx-text-alignment: center;
 }
 
 .button{
