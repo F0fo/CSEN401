@@ -1,9 +1,12 @@
 package model.collectibles;
 
-import exceptions.NoAvailableResourcesException;
 import model.characters.Hero;
+import model.characters.Character;
 
 public interface Collectible {
-    public void pickUp(Hero h);
-    public void use(Hero h) throws NoAvailableResourcesException;
+	
+	void pickUp(Hero h);
+	
+	void use(Hero h);
+
 }
