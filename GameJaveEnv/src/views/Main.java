@@ -301,6 +301,8 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         stage.getScene().setRoot(levelRoot);
         selectedChar = Game.heroes.get(0);
         charStatsManager(n);
+        GridPane mapGrid = Board.createInitialMap();
+        levelRoot.getChildren().add(mapGrid);
     }
 
     public void handle(MouseEvent mouseEvent){

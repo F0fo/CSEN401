@@ -1,12 +1,14 @@
 package views;
 import java.util.Stack;
 
+import engine.Game;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -16,16 +18,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.characters.Explorer;
 import model.characters.Fighter;
 import model.characters.Hero;
+import model.world.CharacterCell;
 
 public class BoardScreen extends Application {
-    private static final int TILE_SIZE = 40;
+    private static final int TILE_SIZE = 48;
     private static final int MAP_SIZE = 15;
+    public static GridPane mapGrid = new GridPane();
 
     public static void main(String[] args)
     {
@@ -36,10 +42,6 @@ public class BoardScreen extends Application {
     @Override
     public void start(Stage mainBoard)  throws Exception
     {
-    
-    BackgroundImage BI = new BackgroundImage(new Image("file:Resources/Images/background.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-    BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-    Background BG = new Background(BI);
 
     // StackPane selectedStats = new StackPane(); //shows the stats of the selected hero
     // StackPane briefStats = new StackPane(); //shows the breif stats of unselected hero
@@ -65,41 +67,79 @@ public class BoardScreen extends Application {
     // CharVBox.getChildren().add(sideCharHBox);
     // fullScreenHBox.getChildren().add(CharVBox);
 
-        HBox mapView = new HBox();
-        mapView.setAlignment(Pos.CENTER_RIGHT);
+        
         //TilePane mapArea = new TilePane(null, 0, 0, null);
-        GridPane mapGrid = new GridPane();
+        //mapGrid = new GridPane();
         mapGrid.setPadding(new Insets(10));
-        mapGrid.setHgap(5);
-        mapGrid.setVgap(5);
+        mapGrid.setHgap(1);
+        mapGrid.setVgap(1);
 
         for(int row = 0; row < MAP_SIZE; row++)
         {
             for(int col = 0; col < MAP_SIZE; col++)
             {
-                StackPane stackPane = createCell("emptybase");
-                mapGrid.add(stackPane,col,row);
-                mapView.getChildren().add(col, stackPane);
+                //StackPane stackPane = createCell("emptyBase");
+                //mapGrid.add(stackPane,col,row);
+                StackPane stackPane = createCell("emptyBase");
+                mapGrid.add(stackPane,col, 14 - row);
                 //need to add check to see position of other stacks pane, create it then stack it
             }
         }
-
-
-
-        mapView.setAlignment(Pos.CENTER_RIGHT);
+        mapGrid.add(createCell("heroPane"), 0, 14 - 0);
         
+        Scene scene = new Scene(mapGrid);
+        mainBoard.setScene(scene);
+        mainBoard.show();
 
     }
 
-    private StackPane createCell(String type)
+    public static GridPane createGrid(){
+        for(int row = 0; row < MAP_SIZE; row++)
+        {
+            for(int col = 0; col < MAP_SIZE; col++)
+            {
+                StackPane stackPane = createCell("emptyBase");
+                mapGrid.add(stackPane,col, 14 - row);
+            }
+        }
+        addCharPane();
+
+        return mapGrid;
+    }
+
+    public static void addCharPane(){
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j < 15; j++){
+                if(Game.map[j][14 - i] instanceof CharacterCell && ((CharacterCell)Game.map[j][14 - i]).getCharacter() instanceof Hero){
+                    Image img4 = new Image("file:Resources/Images/ellie.png");
+                    ImageView imgView4 = new ImageView(img4);
+                    getStackPane(j, i).getChildren().add(imgView4);
+                    //mapGrid.add(, j, 14 - i);
+                }
+            }
+        }
+    }
+
+    static StackPane getStackPane(int j, int i){
+        for(Node node: mapGrid.getChildren()){
+            if(GridPane.getRowIndex(node) == 14 - i && GridPane.getColumnIndex(node) == j){
+                return (StackPane)node;
+            }
+        }
+        return null;
+    }
+
+    private static StackPane createCell(String type)
     {
         StackPane stackPane = new StackPane();
         stackPane.setPrefSize(TILE_SIZE, TILE_SIZE);
         switch (type) 
         {
             case "emptyBase":
-            Image img = new Image("file:Resources/Images/baseTile.png");
+            Image img = new Image("file:Resources/Images/base.png");
             ImageView imgView = new ImageView(img);
+            imgView.setFitHeight(TILE_SIZE);
+            imgView.setPreserveRatio(true);
             stackPane.getChildren().add(imgView);
             break;
 
@@ -116,8 +156,10 @@ public class BoardScreen extends Application {
             break;
 
             case "heroPane":
-            Image img4 = new Image("file:Resources/Images/heroes.png"); //place holder, need to handle the actual selected herp
+            Image img4 = new Image("file:Resources/Images/ellie.png"); //place holder, need to handle the actual selected herp
             ImageView imgView4 = new ImageView(img4);
+            imgView4.setFitHeight(TILE_SIZE);
+            imgView4.setPreserveRatio(true);
             stackPane.getChildren().add(imgView4);
             break;
 
@@ -134,7 +176,13 @@ public class BoardScreen extends Application {
 
     }
 
-
+    // private ImageView createRectangle() {
+    //     Image img = new Image("file:Resources/Images/base.png");
+    //     ImageView imgView = new ImageView(img);
+    //     imgView.setFitHeight(48);
+    //     imgView.setPreserveRatio(true);
+    //     return imgView;
+    // }
 
 }
    
