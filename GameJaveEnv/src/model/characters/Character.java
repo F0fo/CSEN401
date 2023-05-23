@@ -1,4 +1,5 @@
 package model.characters;
+
 import java.awt.Point;
 
 import model.world.CharacterCell;
@@ -6,105 +7,85 @@ import engine.Game;
 import exceptions.InvalidTargetException;
 import exceptions.NotEnoughActionsException;
 
-//read = getters, write = setters
-//Description : A class representing the Characters available in the game. No objects of type Character can be instantiated.
 public abstract class Character {
-    private String name; //read only
-    private Point location; 
-    private int maxHp; //read only
-    private int currentHp;
-    private int attackDmg; //read only
-    private Character target;
 
-    public Character(String name, int maxHp, int attackDmg) {
-        this.name = name;
-        this.maxHp = maxHp;
-        this.attackDmg = attackDmg;
-        currentHp = maxHp;
-    }
+	private String name;
+	private int maxHp;
+	private int currentHp;
+	private Point location;
+	private int attackDmg;
+	private Character target;
 
-    //read and write
-    public Point getLocation() {
-        return location;
-    }
+	public Character(String name, int maxHp, int attackDamage) {
+		this.name = name;
+		this.maxHp = maxHp;
+		this.attackDmg = attackDamage;
+		this.currentHp = maxHp;
+	}
 
-    public void setLocation(Point location) {
-       // if ((location.getY() < 0) || (location.getY() > 14) || (location.getX())= < 0) || location.getX() > 14)  )
-        this.location = location;   
-        
-    }
+	public int getCurrentHp() {
+		return currentHp;
+	}
 
-    public int getCurrentHp() {
-        return currentHp;
-    }
+	public void setCurrentHp(int currentHp) {
+		if (currentHp <= 0) {
+			this.currentHp = 0;
+			onCharacterDeath();
+			
+		} else if (currentHp > maxHp) {
+			this.currentHp = maxHp;
+		} else
+			this.currentHp = currentHp;
+	}
 
-    public void setCurrentHp(int currentHp) {
-    	if(currentHp <= 0)
-        {
-            this.currentHp = 0;
-            //onCharacterDeath();
-        }
-        else if(currentHp > maxHp)
-            this.currentHp = maxHp;
-        else
-            this.currentHp = currentHp;
-    
-        }
+	public Point getLocation() {
+		return location;
+	}
 
-    public Character getTarget() {
-        return target;
-    }
-    
-    public void setTarget(Character target) {
-        this.target = target;
-    }
+	public void setLocation(Point location) {
+		this.location = location;
+	}
 
-    //read only
-    public String getName() {
-        return name;
-    }
-    
-    public int getMaxHp() {
-        return maxHp;
-    }
-    
-    public int getAttackDmg() {
-        return attackDmg;
-    }
-    
-    
-    
-    public void attack() throws NotEnoughActionsException, InvalidTargetException {
-        if(this instanceof Zombie){
-            Game.selectTarget((Zombie)this);
-            System.out.println("target selected as a zombie");
-        }
-        if(Game.checkAdjacent(this, getTarget())){
+	public Character getTarget() {
+		return target;
+	}
 
-	    	target.setCurrentHp(target.getCurrentHp() - attackDmg);
-            target.setTarget(this);
-	    	defend(target);
-	    	if(target.getCurrentHp() <= 0)
-            {
-	    		target.onCharacterDeath();
-            }
-        }
-        else
-            throw new InvalidTargetException("Selected target is invalid.");
-    }
-    
-    public void defend(Character c) {
-    	c.target.setCurrentHp(c.target.getCurrentHp() - (c.attackDmg / 2));
+	public void setTarget(Character target) {
+		this.target = target;
+	}
 
+	public String getName() {
+		return name;
+	}
 
-    	if(c.target.getCurrentHp() <= 0)
-        {   
-    		c.target.onCharacterDeath();
-            
-        }
-    }
-    
-    public void onCharacterDeath() {
-    	((CharacterCell)Game.map[location.x][location.y]).setCharacter(null);
-    }
+	public int getMaxHp() {
+		return maxHp;
+	}
+
+	public int getAttackDmg() {
+		return attackDmg;
+	}
+
+	public void attack() throws NotEnoughActionsException,
+			InvalidTargetException {
+		getTarget().setCurrentHp(getTarget().getCurrentHp() - getAttackDmg());
+		getTarget().defend(this);
+	}
+
+	public void defend(Character c) {
+		c.setCurrentHp(c.getCurrentHp() - getAttackDmg() / 2);
+	}
+
+	public void onCharacterDeath() {
+		Point p = this.getLocation();
+		
+		if (this instanceof Zombie) {
+			Game.zombies.remove(this);
+			Game.spawnNewZombie();
+		} else if (this instanceof Hero) {
+			Game.heroes.remove(this);
+		}
+		Game.map[p.x][p.y] = new CharacterCell(null);
+	}
+
 }
