@@ -1,0 +1,41 @@
+.label{
+    -fx-text-fill: "white";
+    -fx-font-size: 120;
+    -fx-font-family: "PressGothicW01-Regular";
+}
+
+#subtitle{
+    -fx-font-size: 80;
+}
+
+#stats{
+    -fx-font-size: 50;
+    -fx-text-alignment: center;
+}
+
+#selectedChar{
+    -fx-font-size: 40;
+}
+
+#otherChar{
+    -fx-font-size: 22;
+    -fx-text-alignment: center;
+}
+
+.button{
+    -fx-text-fill: "white";
+    -fx-font-size: 60;
+    -fx-font-family: "PressGothicW01-Regular";
+}
+
+.button:hover{
+    -fx-text-fill: rgb(255, 240, 189);
+}
+
+#characterButton{
+    -fx-background-color: transparent;
+}
+
+#characterButton:hover{
+    /*-fx-background-color: rgb(255, 255, 255, 0.3);*/
+}
