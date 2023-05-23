@@ -21,7 +21,7 @@ import exceptions.InvalidTargetException;
 import exceptions.NotEnoughActionsException;
 
 public class Game {
-
+	public static ArrayList<Hero> useableHeroes = new ArrayList<Hero>(); //store all curred & unselected heroes
 	public static ArrayList<Hero> availableHeroes = new ArrayList<Hero>();
 	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
@@ -129,6 +129,7 @@ public class Game {
 	public static void startGame(Hero h) {
 		heroes.add(h);
 		availableHeroes.remove(h);
+		useableHeroes.add(h); //add the player first selected hero at the start of the game to useableheroes 
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
 				map[i][j] = new CharacterCell(null);
