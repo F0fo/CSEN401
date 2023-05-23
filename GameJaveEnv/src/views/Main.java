@@ -3,27 +3,27 @@ package views;
 import java.util.ArrayList;
 
 import engine.Game;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import model.characters.Explorer;
-import model.characters.Fighter;
-import model.characters.Hero;
+    import javafx.application.Application;
+    import javafx.application.Platform;
+    import javafx.event.ActionEvent;
+    import javafx.event.EventHandler;
+    import javafx.geometry.Insets;
+    import javafx.geometry.Pos;
+    import javafx.scene.Scene;
+    import javafx.scene.control.Button;
+    import javafx.scene.control.ContentDisplay;
+    import javafx.scene.control.Label;
+    import javafx.scene.image.Image;
+    import javafx.scene.image.ImageView;
+    import javafx.scene.input.KeyCombination;
+    import javafx.scene.input.MouseEvent;
+    import javafx.scene.layout.*;
+    import javafx.scene.text.Font;
+    import javafx.scene.text.Text;
+    import javafx.stage.Stage;
+    import model.characters.Explorer;
+    import model.characters.Fighter;
+    import model.characters.Hero;
 
 public class Main extends Application implements EventHandler<MouseEvent> {
 
@@ -31,7 +31,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     private ImageView[] charImgViews = new ImageView[8];
     private ImageView[] charImgViewsBorder = new ImageView[8];
     public Label statsLabel = new Label();
-    private ArrayList<Hero> AH;
+    private ArrayList<Hero> AH;     
     private String t;
 
     public static void main(String[] args) {
