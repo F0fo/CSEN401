@@ -13,6 +13,15 @@
     -fx-text-alignment: center;
 }
 
+#selectedChar{
+    -fx-font-size: 40;
+}
+
+#otherChar{
+    -fx-font-size: 22;
+    -fx-text-alignment: center;
+}
+
 .button{
     -fx-text-fill: "white";
     -fx-font-size: 60;

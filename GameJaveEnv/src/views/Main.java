@@ -19,10 +19,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.characters.Explorer;
-import model.characters.Fighter;
 import model.characters.Hero;
 
 public class Main extends Application implements EventHandler<MouseEvent> {
@@ -32,7 +29,14 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     private ImageView[] charImgViewsBorder = new ImageView[8];
     public Label statsLabel = new Label();
     private ArrayList<Hero> AH;
-    private String t;
+    private HBox levelRoot;
+    private Stage stage;
+    private VBox statsRoot;
+    private HBox selectedCharRoot;
+    private VBox otherCharsRoot;
+    private HBox otherCharsHbox1;
+    private HBox otherCharsHbox2;
+    private Hero selectedChar;
 
     public static void main(String[] args) {
         launch(args);
@@ -40,6 +44,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
 
     public void start(Stage stage) throws Exception {
         // creating start menu scene and stack pane
+        this.stage = stage;
         StackPane menuRoot = new StackPane();
         StackPane charSelectRoot = new StackPane();
         VBox left = new VBox();
@@ -192,10 +197,110 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         
         // ------------------------------------------------------------------------------------------------------
 
+        // creating level root char stats root
+        levelRoot = new HBox(2);
+        levelRoot.setBackground(BG);
+        statsRoot = new VBox(2);
+        statsRoot.setPadding(new Insets(60));
+        levelRoot.getChildren().add(statsRoot);
+
+        // creating selected char stats area
+        selectedCharRoot = new HBox(3);
+        selectedCharRoot.setSpacing(20);
+
+        // ------------------------------------------------------------------------------------------------------
+
         // adding scene to stage
         stage.setScene(scene);
         scene.getStylesheets().add(getClass().getResource("Styling.css").toExternalForm());
         stage.show();
+    }
+
+    public void charStatsManager(int n){
+        String s1 = "Name: " + selectedChar.getName() + "\nType: " + selectedChar.getClass().getSimpleName() + "\nHP: " +
+        selectedChar.getCurrentHp() + "/" + selectedChar.getMaxHp() + "\nActions: " + selectedChar.getActionsAvailable() + "/" +
+        selectedChar.getMaxActions();
+        String s2 = "\n  Atk: " + selectedChar.getAttackDmg() + "\n  Vaccines: " +  selectedChar.getVaccineInventory().size() + 
+        "\n  Supplies: " + selectedChar.getSupplyInventory().size();
+        Label selectedCharImg = new Label();
+        charImgViewsBorder[n].setFitHeight(190);
+        selectedCharImg.setGraphic(charImgViewsBorder[n]);
+        Label selectedCharStats1 = new Label(s1);
+        Label selectedCharStats2 = new Label(s2);
+        selectedCharRoot.getChildren().addAll(selectedCharImg, selectedCharStats1, selectedCharStats2);
+        selectedCharStats1.setId("selectedChar");
+        selectedCharStats2.setId("selectedChar");
+
+        otherCharsRoot = new VBox();
+        otherCharsHbox1 = new HBox(2);
+        otherCharsHbox1.setSpacing(120);
+        //otherCharsHbox1.setAlignment(Pos.CENTER);
+        otherCharsHbox2 = new HBox(2);
+        otherCharsHbox2.setSpacing(120);
+        //otherCharsHbox2.setAlignment(Pos.CENTER);
+        otherCharsRoot.getChildren().addAll(otherCharsHbox1, otherCharsHbox2);
+        otherCharsRoot.setSpacing(20);
+        statsRoot.getChildren().addAll(selectedCharRoot, otherCharsRoot);
+        int otherCharsNum = 0;
+
+        for(int i = 0; i < Game.heroes.size(); i++){
+            if(!Game.heroes.get(i).equals(selectedChar)){
+                otherCharsNum++;
+                String s = Game.heroes.get(i).getName() + "\n" + Game.heroes.get(i).getClass().getSimpleName() + "\n" +
+                Game.heroes.get(i).getCurrentHp() + ", " + Game.heroes.get(i).getActionsAvailable() + ", " + Game.heroes.get(i).getAttackDmg();
+
+                VBox otherCharRoot = new VBox();
+                Label otherCharImg = new Label();
+                String name = Game.heroes.get(i).getName();
+                if(name.equals("Joel Miller")){
+                    otherCharImg.setGraphic(charImgViewsBorder[0]);
+                    charImgViewsBorder[0].setFitHeight(100);
+                }
+                else if(name.equals("Ellie Williams")){
+                    otherCharImg.setGraphic(charImgViewsBorder[1]);
+                    charImgViewsBorder[1].setFitHeight(100);
+                }
+                else if(name.equals("Tess")){
+                    otherCharImg.setGraphic(charImgViewsBorder[2]);
+                    charImgViewsBorder[2].setFitHeight(100);
+                }
+                else if(name.equals("Riley Abel")){
+                    otherCharImg.setGraphic(charImgViewsBorder[3]);
+                    charImgViewsBorder[3].setFitHeight(100);
+                }
+                else if(name.equals("Tommy Miller")){
+                    otherCharImg.setGraphic(charImgViewsBorder[4]);
+                    charImgViewsBorder[4].setFitHeight(100);
+                }
+                else if(name.equals("Bill")){
+                    otherCharImg.setGraphic(charImgViewsBorder[5]);
+                    charImgViewsBorder[5].setFitHeight(130);
+                }
+                else if(name.equals("David")){
+                    otherCharImg.setGraphic(charImgViewsBorder[6]);
+                    charImgViewsBorder[6].setFitHeight(130);
+                }
+                else if(name.equals("Henry Burell")){
+                    otherCharImg.setGraphic(charImgViewsBorder[7]);
+                    charImgViewsBorder[7].setFitHeight(130);
+                }
+                Label otherCharStats = new Label(s);
+                otherCharRoot.setAlignment(Pos.CENTER);
+                otherCharStats.setId("otherChar");
+                otherCharRoot.getChildren().addAll(otherCharImg, otherCharStats);
+                if(otherCharsNum < 3)
+                    otherCharsHbox1.getChildren().add(otherCharRoot);
+                else
+                    otherCharsHbox2.getChildren().add(otherCharRoot);
+            }
+        }
+    }
+
+    public void gameStart(int n){
+        Game.startGame(Game.availableHeroes.get(n));
+        stage.getScene().setRoot(levelRoot);
+        selectedChar = Game.heroes.get(0);
+        charStatsManager(n);
     }
 
     public void handle(MouseEvent mouseEvent){
@@ -211,7 +316,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
                 statsLabel.setText("");
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                Game.startGame(Game.availableHeroes.get(0));
+                gameStart(0);
             }
         }
         if(mouseEvent.getSource() == charButtons[1]){
@@ -226,7 +331,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
                 statsLabel.setText("");
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                Game.startGame(Game.availableHeroes.get(1));
+                gameStart(1);
             }
         }
         if(mouseEvent.getSource() == charButtons[2]){
@@ -241,7 +346,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
                 statsLabel.setText("");
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                Game.startGame(Game.availableHeroes.get(2));
+                gameStart(2);
             }
         }
         if(mouseEvent.getSource() == charButtons[3]){
@@ -256,7 +361,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
                 statsLabel.setText("");
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                Game.startGame(Game.availableHeroes.get(3));
+                gameStart(3);
             }
         }
         if(mouseEvent.getSource() == charButtons[4]){
@@ -271,7 +376,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
                 statsLabel.setText("");
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                Game.startGame(Game.availableHeroes.get(4));
+                gameStart(4);
             }
         }
         if(mouseEvent.getSource() == charButtons[5]){
@@ -286,7 +391,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
                 statsLabel.setText("");
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                Game.startGame(Game.availableHeroes.get(5));
+                gameStart(5);
             }
         }
         if(mouseEvent.getSource() == charButtons[6]){
@@ -301,7 +406,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
                 statsLabel.setText("");
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                Game.startGame(Game.availableHeroes.get(6));
+                gameStart(6);
             }
         }
         if(mouseEvent.getSource() == charButtons[7]){
@@ -316,7 +421,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
                 statsLabel.setText("");
             }
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                Game.startGame(Game.availableHeroes.get(7));
+                gameStart(7);
             }
         }
     }

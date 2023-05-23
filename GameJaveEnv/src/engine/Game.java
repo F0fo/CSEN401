@@ -128,6 +128,10 @@ public class Game {
 
 	public static void startGame(Hero h) {
 		heroes.add(h);
+		heroes.add(availableHeroes.get(1));
+		heroes.add(availableHeroes.get(2));
+		heroes.add(availableHeroes.get(3));
+		heroes.add(availableHeroes.get(4));
 		availableHeroes.remove(h);
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
