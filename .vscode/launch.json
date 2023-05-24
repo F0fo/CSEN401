@@ -5,6 +5,7 @@
     "version": "0.2.0",
     "configurations": [
 
+
     
 
         {
@@ -48,6 +49,14 @@
             "name": "Board",
             "request": "launch",
             "mainClass": "views.Board",
+            "vmArgs": "--module-path \"D:\\Personal\\JavaFX\\openjfx-20.0.1_windows-x64_bin-sdk\\javafx-sdk-20.0.1\\lib\" --add-modules javafx.controls,javafx.fxml",
+            "projectName": "CSEN401_7ef120b3"
+        },
+        {
+            "type": "java",
+            "name": "UserInputs",
+            "request": "launch",
+            "mainClass": "views.UserInputs",
             "vmArgs": "--module-path \"D:\\Personal\\JavaFX\\openjfx-20.0.1_windows-x64_bin-sdk\\javafx-sdk-20.0.1\\lib\" --add-modules javafx.controls,javafx.fxml",
             "projectName": "CSEN401_7ef120b3"
         }

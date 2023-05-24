@@ -35,3 +35,7 @@
 #characterButton{
     -fx-background-color: transparent;
 }
+
+#mapButton{
+    -fx-background-color: rgb(255, 255, 255, 0.5);
+}

@@ -128,7 +128,9 @@ public class Game {
 
 	public static void startGame(Hero h) {
 		heroes.add(h);
+
 		availableHeroes.remove(h);
+		
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
 				map[i][j] = new CharacterCell(null);
@@ -180,4 +182,34 @@ public class Game {
 			map[x][y] = new TrapCell();
 		}
 	}
+
+
+	public static void printMap(Cell[][] map){
+    	for(int i = 14; i >= 0; i--){
+    		for(int j = 0; j < 15; j++){
+    			if(map[i][j] == null)
+    				System.out.print("[ ]");
+    			else{
+    				if(map[i][j] instanceof CharacterCell && ((CharacterCell)map[i][j]).getCharacter() != null){
+    					if(((CharacterCell)map[i][j]).getCharacter() instanceof Hero)
+    						System.out.print("[H]");
+    					else if(((CharacterCell)map[i][j]).getCharacter() instanceof Zombie)
+    						System.out.print("[Z]");
+    				}
+    				else if(map[i][j] instanceof CollectibleCell){
+    					if(((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine)
+    						System.out.print("[V]");
+    					else if(((CollectibleCell) map[i][j]).getCollectible() instanceof Supply)
+    						System.out.print("[S]");
+    				}
+    				else if(map[i][j] instanceof TrapCell){
+    					System.out.print("[T]");
+    				}
+    				else
+    					System.out.print("[ ]");
+    			}
+    		}
+    		System.out.println();
+    	}
+    }
 }

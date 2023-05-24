@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import engine.Game;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -32,11 +33,14 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     private HBox levelRoot;
     private Stage stage;
     private VBox statsRoot;
-    private HBox selectedCharRoot;
     private VBox otherCharsRoot;
     private HBox otherCharsHbox1;
     private HBox otherCharsHbox2;
-    private Hero selectedChar;
+    
+    public static HBox selectedCharRoot;
+    public static Hero selectedChar;
+    public static Label selectedCharStats1 = new Label();
+    public static Label selectedCharStats2 = new Label();
 
     public static void main(String[] args) {
         launch(args);
@@ -225,8 +229,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         Label selectedCharImg = new Label();
         charImgViewsBorder[n].setFitHeight(190);
         selectedCharImg.setGraphic(charImgViewsBorder[n]);
-        Label selectedCharStats1 = new Label(s1);
-        Label selectedCharStats2 = new Label(s2);
+
+        StatsManager.updateSelectedStats();
+
         selectedCharRoot.getChildren().addAll(selectedCharImg, selectedCharStats1, selectedCharStats2);
         selectedCharStats1.setId("selectedChar");
         selectedCharStats2.setId("selectedChar");
@@ -234,10 +239,8 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         otherCharsRoot = new VBox();
         otherCharsHbox1 = new HBox(2);
         otherCharsHbox1.setSpacing(120);
-        //otherCharsHbox1.setAlignment(Pos.CENTER);
         otherCharsHbox2 = new HBox(2);
         otherCharsHbox2.setSpacing(120);
-        //otherCharsHbox2.setAlignment(Pos.CENTER);
         otherCharsRoot.getChildren().addAll(otherCharsHbox1, otherCharsHbox2);
         otherCharsRoot.setSpacing(20);
         statsRoot.getChildren().addAll(selectedCharRoot, otherCharsRoot);
@@ -302,7 +305,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         selectedChar = Game.heroes.get(0);
         charStatsManager(n);
         GridPane mapGrid = Board.createInitialMap();
+        mapGrid = Board.heroManager(mapGrid);
         levelRoot.getChildren().add(mapGrid);
+        Game.printMap(Game.map);
     }
 
     public void handle(MouseEvent mouseEvent){
