@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import engine.Game;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -27,20 +26,37 @@ public class Main extends Application implements EventHandler<MouseEvent> {
 
     private Button[] charButtons = new Button[8];
     private ImageView[] charImgViews = new ImageView[8];
-    private ImageView[] charImgViewsBorder = new ImageView[8];
+    public static ImageView[] charImgViewsBorder = new ImageView[8];
     public Label statsLabel = new Label();
     private ArrayList<Hero> AH;
     private HBox levelRoot;
     private Stage stage;
     private VBox statsRoot;
-    private VBox otherCharsRoot;
-    private HBox otherCharsHbox1;
-    private HBox otherCharsHbox2;
+
+    public static VBox otherCharsRoot = new VBox();
+    public static HBox otherCharsHbox1 = new HBox(3);
+    public static HBox otherCharsHbox2 = new HBox(2);
+    public static VBox otherCharRoot = new VBox();
+
+    public static Label otherCharImg1 = new Label();
+    public static Label otherCharImg2 = new Label();
+    public static Label otherCharImg3 = new Label();
+    public static Label otherCharImg4 = new Label();
+    public static Label otherCharImg5 = new Label();
+    public static Label[] otherCharImgs = {otherCharImg1, otherCharImg2, otherCharImg3, otherCharImg4, otherCharImg5};
+
+    public static Label otherCharText1 = new Label();
+    public static Label otherCharText2 = new Label();
+    public static Label otherCharText3 = new Label();
+    public static Label otherCharText4 = new Label();
+    public static Label otherCharText5 = new Label();
+    public static Label[] otherCharTexts = {otherCharText1, otherCharText2, otherCharText3, otherCharText4, otherCharText5};
     
     public static HBox selectedCharRoot;
     public static Hero selectedChar;
     public static Label selectedCharStats1 = new Label();
     public static Label selectedCharStats2 = new Label();
+    public static Label selectedCharImg = new Label();
 
     public static void main(String[] args) {
         launch(args);
@@ -221,82 +237,47 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     }
 
     public void charStatsManager(int n){
-        String s1 = "Name: " + selectedChar.getName() + "\nType: " + selectedChar.getClass().getSimpleName() + "\nHP: " +
-        selectedChar.getCurrentHp() + "/" + selectedChar.getMaxHp() + "\nActions: " + selectedChar.getActionsAvailable() + "/" +
-        selectedChar.getMaxActions();
-        String s2 = "\n  Atk: " + selectedChar.getAttackDmg() + "\n  Vaccines: " +  selectedChar.getVaccineInventory().size() + 
-        "\n  Supplies: " + selectedChar.getSupplyInventory().size();
-        Label selectedCharImg = new Label();
-        charImgViewsBorder[n].setFitHeight(190);
-        selectedCharImg.setGraphic(charImgViewsBorder[n]);
 
         StatsManager.updateSelectedStats();
+        StatsManager.updateOtherStats();
 
         selectedCharRoot.getChildren().addAll(selectedCharImg, selectedCharStats1, selectedCharStats2);
         selectedCharStats1.setId("selectedChar");
         selectedCharStats2.setId("selectedChar");
 
-        otherCharsRoot = new VBox();
-        otherCharsHbox1 = new HBox(2);
-        otherCharsHbox1.setSpacing(120);
-        otherCharsHbox2 = new HBox(2);
-        otherCharsHbox2.setSpacing(120);
+        VBox otherChar1 = new VBox();
+        otherChar1.getChildren().addAll(otherCharImg1, otherCharText1);
+        VBox otherChar2 = new VBox();
+        otherChar2.getChildren().addAll(otherCharImg2, otherCharText2);
+        VBox otherChar3 = new VBox();
+        otherChar3.getChildren().addAll(otherCharImg3, otherCharText3);
+        VBox otherChar4 = new VBox();
+        otherChar4.getChildren().addAll(otherCharImg4, otherCharText4);
+        VBox otherChar5 = new VBox();
+        otherChar5.getChildren().addAll(otherCharImg5, otherCharText5);
+
+        otherChar1.setAlignment(Pos.CENTER);
+        otherChar2.setAlignment(Pos.CENTER);
+        otherChar3.setAlignment(Pos.CENTER);
+        otherChar4.setAlignment(Pos.CENTER);
+        otherChar5.setAlignment(Pos.CENTER);
+
+        otherCharText1.setId("otherChar");
+        otherCharText2.setId("otherChar");
+        otherCharText3.setId("otherChar");
+        otherCharText4.setId("otherChar");
+        otherCharText5.setId("otherChar");
+
+        otherCharsHbox1.getChildren().addAll(otherChar1, otherChar2, otherChar3);
+        otherCharsHbox2.getChildren().addAll(otherChar4, otherChar5);
+
+        otherCharsHbox1.setSpacing(100);
+        otherCharsHbox2.setSpacing(100);
+        
         otherCharsRoot.getChildren().addAll(otherCharsHbox1, otherCharsHbox2);
         otherCharsRoot.setSpacing(20);
+
         statsRoot.getChildren().addAll(selectedCharRoot, otherCharsRoot);
-        int otherCharsNum = 0;
-
-        for(int i = 0; i < Game.heroes.size(); i++){
-            if(!Game.heroes.get(i).equals(selectedChar)){
-                otherCharsNum++;
-                String s = Game.heroes.get(i).getName() + "\n" + Game.heroes.get(i).getClass().getSimpleName() + "\n" +
-                Game.heroes.get(i).getCurrentHp() + ", " + Game.heroes.get(i).getActionsAvailable() + ", " + Game.heroes.get(i).getAttackDmg();
-
-                VBox otherCharRoot = new VBox();
-                Label otherCharImg = new Label();
-                String name = Game.heroes.get(i).getName();
-                if(name.equals("Joel Miller")){
-                    otherCharImg.setGraphic(charImgViewsBorder[0]);
-                    charImgViewsBorder[0].setFitHeight(100);
-                }
-                else if(name.equals("Ellie Williams")){
-                    otherCharImg.setGraphic(charImgViewsBorder[1]);
-                    charImgViewsBorder[1].setFitHeight(100);
-                }
-                else if(name.equals("Tess")){
-                    otherCharImg.setGraphic(charImgViewsBorder[2]);
-                    charImgViewsBorder[2].setFitHeight(100);
-                }
-                else if(name.equals("Riley Abel")){
-                    otherCharImg.setGraphic(charImgViewsBorder[3]);
-                    charImgViewsBorder[3].setFitHeight(100);
-                }
-                else if(name.equals("Tommy Miller")){
-                    otherCharImg.setGraphic(charImgViewsBorder[4]);
-                    charImgViewsBorder[4].setFitHeight(100);
-                }
-                else if(name.equals("Bill")){
-                    otherCharImg.setGraphic(charImgViewsBorder[5]);
-                    charImgViewsBorder[5].setFitHeight(130);
-                }
-                else if(name.equals("David")){
-                    otherCharImg.setGraphic(charImgViewsBorder[6]);
-                    charImgViewsBorder[6].setFitHeight(130);
-                }
-                else if(name.equals("Henry Burell")){
-                    otherCharImg.setGraphic(charImgViewsBorder[7]);
-                    charImgViewsBorder[7].setFitHeight(130);
-                }
-                Label otherCharStats = new Label(s);
-                otherCharRoot.setAlignment(Pos.CENTER);
-                otherCharStats.setId("otherChar");
-                otherCharRoot.getChildren().addAll(otherCharImg, otherCharStats);
-                if(otherCharsNum < 3)
-                    otherCharsHbox1.getChildren().add(otherCharRoot);
-                else
-                    otherCharsHbox2.getChildren().add(otherCharRoot);
-            }
-        }
     }
 
     public void gameStart(int n){

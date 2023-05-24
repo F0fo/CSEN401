@@ -16,6 +16,17 @@ import model.world.CharacterCell;
 import model.world.CollectibleCell;
 
 public class Board {
+    // if visible:
+    // Layer 0: base
+    // Layer 1: button if empty, otherwise vaccine/supply/zombie/character
+    // Layer 2: button if layer 1 was vaccine/supply/zombie/character
+
+    // if not visible:
+    // Layer 0: base
+    // Layer 1: visibility if empty, otherwise vaccine/supply/zombie/character
+    // Layer 2: visibility if layer 1 was vaccine/supply/zombie/character, button otherwise
+    // Layer 3: button if layer 2 was visibility
+
     private static final int TILE_SIZE = 48;
     public static GridPane mapGrid = new GridPane();
 

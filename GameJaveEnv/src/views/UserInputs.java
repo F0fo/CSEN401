@@ -1,7 +1,5 @@
 package views;
 
-
-
 import java.awt.Point;
 
 import engine.Game;
@@ -12,10 +10,8 @@ import exceptions.NotEnoughActionsException;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -28,13 +24,15 @@ public class UserInputs {
         public void handle(MouseEvent m) { 
             StackPane s;
             Point p;
-           switch(m.getButton())
-           {
+            switch(m.getButton())
+            {
                 case PRIMARY:
                 s = (StackPane)((Button)m.getSource()).getParent();
                 p = findStackPane(s);
                 if(Game.map[p.x][p.y] instanceof CharacterCell && ((CharacterCell)(Game.map[p.x][p.y])).getCharacter() instanceof Hero){
                     Main.selectedChar = (Hero)((CharacterCell)(Game.map[p.x][p.y])).getCharacter();
+                    StatsManager.updateSelectedStats();
+                    StatsManager.updateOtherStats();
                 }
                 break;
 
@@ -48,7 +46,7 @@ public class UserInputs {
 
                 default:
                 System.out.print("Other");
-           } 
+            } 
         } 
      };
 
@@ -130,6 +128,10 @@ public class UserInputs {
                     try {
                         Main.selectedChar.cure();
                         Board.heroManager(Board.mapGrid);
+
+                        StatsManager.updateSelectedStats();
+                        StatsManager.updateOtherStats();
+
                     } catch (NoAvailableResourcesException | InvalidTargetException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
                     }
