@@ -97,7 +97,7 @@ public class BoardScreen extends Application {
         stackPane.setPrefSize(TILE_SIZE, TILE_SIZE);
         switch (type) 
         {
-            case "emptyBase":
+            case "emptybase":
             Image img = new Image("file:Resources/Images/baseTile.png");
             ImageView imgView = new ImageView(img);
             stackPane.getChildren().add(imgView);
