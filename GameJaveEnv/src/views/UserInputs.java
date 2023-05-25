@@ -45,7 +45,7 @@ public class UserInputs {
                 break;
 
                 default:
-                System.out.print("Other");
+                break;
             } 
         } 
      };
