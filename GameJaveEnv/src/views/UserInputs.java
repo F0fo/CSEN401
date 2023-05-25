@@ -11,14 +11,13 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import model.characters.Direction;
-import model.characters.Explorer;
-import model.characters.Medic;
 import model.characters.Zombie;
 import model.characters.Hero;
 import model.world.CharacterCell;
@@ -48,11 +47,6 @@ public class UserInputs {
                     StatsManager.updateSelectedStats();
                     StatsManager.updateOtherStats();
                 }
-                // if (Game.map[p.x][p.y] instanceof CharacterCell && ((CharacterCell)(Game.map[p.x][p.y])).getCharacter() instanceof Zombie)
-                // {
-                //     selectedZombie = (Zombie) ((CharacterCell)(Game.map[p.x][p.y])).getCharacter();
-                //     ((Hero) (CharacterCell) (Game.map[p.x][p.y])).setTarget( (Character) selectedZombie);
-                // }
                 break;
 
                 case SECONDARY:
@@ -83,21 +77,14 @@ public class UserInputs {
                         int Y = (int) Main.selectedChar.getLocation().getY();
                         trapWarning(X,Y);
                         StackPane s = Board.getStackPane(Y, 14-X);
-                        s.getChildren().remove(1);
+                        if(s.getChildren().get(1) instanceof ImageView)
+                            s.getChildren().remove(1);
                         Board.mapGrid = Board.heroManager(Board.mapGrid);
                         StatsManager.updateSelectedStats();
 
-                        // if ( X < 14) 
-                        // {
-                        //     StackPane l = Board.getStackPane(Y-1,newX + 1);
-                        //     StackPane m = Board.getStackPane(Y,newX + 1);
-                        //     StackPane r = Board.getStackPane(Y+1,newX + 1);
-                        // } scrapped idea, i give up [Here]
-                            //thinking was to allocate the 6 stack panes that will always change on move, 3 will be set back to invis if no hero is within range and 3 would be set to vis when hero is in rage
-                            //was causing alot of visual bugs where the visibilty would change due to no apparent cause
-
-
                         Board.makeVisible(Board.mapGrid);
+
+                        Board.characterRemove(Board.mapGrid);
                         
                     } catch (MovementException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
@@ -112,12 +99,15 @@ public class UserInputs {
                         int Y = (int) Main.selectedChar.getLocation().getY() + 1;
                         trapWarning(X,Y);
                         StackPane s = Board.getStackPane(Y, 14 - X);
-                        s.getChildren().remove(1);
+                        if(s.getChildren().get(1) instanceof ImageView)
+                            s.getChildren().remove(1);
                         Board.mapGrid = Board.heroManager(Board.mapGrid);
 
                         StatsManager.updateSelectedStats();
 
                         Board.makeVisible(Board.mapGrid);
+
+                        Board.characterRemove(Board.mapGrid);
 
                     } catch (MovementException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
@@ -132,47 +122,69 @@ public class UserInputs {
                         int Y = (int) Main.selectedChar.getLocation().getY();
                         trapWarning(X,Y);
                         StackPane s = Board.getStackPane(Y, 14 - X);
-                        s.getChildren().remove(1);
+                        if(s.getChildren().get(1) instanceof ImageView)
+                            s.getChildren().remove(1);
                         Board.mapGrid = Board.heroManager(Board.mapGrid);
 
                         StatsManager.updateSelectedStats();
 
                         Board.makeVisible(Board.mapGrid);
 
-                        Game.endTurn();
-                        Board.makeInvisible(Board.mapGrid);
-                        Board.makeVisible(Board.mapGrid);
-
-                    } catch (MovementException | NotEnoughActionsException | InvalidTargetException e1) {
-                        e1.printStackTrace();
-                    }
-                    break;
-
-                case D:
-                    try {
-                        Main.selectedChar.move(Direction.RIGHT);
-
-                        int X = (int) Main.selectedChar.getLocation().getX();
-                        int Y = (int) Main.selectedChar.getLocation().getY() - 1;
-                        trapWarning(X,Y);
-                        StackPane s = Board.getStackPane(Y, 14 - X);
-                        s.getChildren().remove(1);
-                        Board.mapGrid = Board.heroManager(Board.mapGrid);
-
-                        StatsManager.updateSelectedStats();
-
-                        Board.makeVisible(Board.mapGrid);
+                        Board.characterRemove(Board.mapGrid);
 
                     } catch (MovementException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
                     }
                     break;
                 
+                    
+                    case D:
+                    try {
+                        Main.selectedChar.move(Direction.RIGHT);
+                        
+                        int X = (int) Main.selectedChar.getLocation().getX();
+                        int Y = (int) Main.selectedChar.getLocation().getY() - 1;
+                        trapWarning(X,Y);
+                        StackPane s = Board.getStackPane(Y, 14 - X);
+                        if(s.getChildren().get(1) instanceof ImageView)
+                        s.getChildren().remove(1);
+                        Board.mapGrid = Board.heroManager(Board.mapGrid);
+                        
+                        StatsManager.updateSelectedStats();
+                        
+                        Board.makeVisible(Board.mapGrid);
+                        
+                        Board.characterRemove(Board.mapGrid);
+                        
+                    } catch (MovementException | NotEnoughActionsException e1) {
+                        e1.printStackTrace();
+                    }
+                    break;
+                    
+                case E:
+                    try {
+                        Game.endTurn();
+                        Board.characterRemove(Board.mapGrid);
+                        Board.zombieAdd(Board.mapGrid);
+
+                        // StatsManager.clearStats();
+                        // StatsManager.updateSelectedStats();
+                        // StatsManager.updateOtherStats();
+
+                        Board.makeInvisible(Board.mapGrid);
+                        Board.makeVisible(Board.mapGrid);
+
+                    } catch (NotEnoughActionsException | InvalidTargetException e1) {
+                        e1.printStackTrace();
+                    }
+                    break;
+                    
                 case C:
                     try {
                         Main.selectedChar.cure();
                         Board.heroManager(Board.mapGrid);
 
+                        StatsManager.clearStats();
                         StatsManager.updateSelectedStats();
                         StatsManager.updateOtherStats();
 
@@ -183,9 +195,10 @@ public class UserInputs {
                 case R:
                     try 
                     {
-                        Main.selectedChar.attack();    //character is attacking itself even though the target is set to be the zombie? [HERE]
-                                                        //then it starts destryong the buttons?????
-                        StatsManager.updateSelectedStats();
+                        Main.selectedChar.attack();
+
+                        Board.zombieAdd(Board.mapGrid);
+                        Board.characterRemove(Board.mapGrid);
 
                     } catch ( InvalidTargetException | NotEnoughActionsException e1)
                     {
@@ -196,7 +209,12 @@ public class UserInputs {
                 try 
                     {
                         Main.selectedChar.useSpecial();
-                        StatsManager.updateSelectedStats(); //need to test explorer special after doing visibility [HERE]
+                        Board.makeVisible(Board.mapGrid);
+                        
+                        StatsManager.clearStats();
+                        StatsManager.updateSelectedStats();
+                        StatsManager.updateOtherStats();
+
                                                             //need to test fighter special after fixing attack 
                     } catch (InvalidTargetException | NoAvailableResourcesException e1)
                     {
@@ -223,19 +241,19 @@ public class UserInputs {
     private static void trapWarning(int x, int y)  //not detecting trap cell properly [HERE] 
     {
 
-        if ( !(Game.map[x][y] instanceof TrapCell) )
-            return;
-        Alert alert = new Alert(AlertType.WARNING);
-        alert.setTitle("Trap Warning");
-        alert.setHeaderText("Player Stepped on a Trap!");
-        alert.setContentText("Be careful!");
+        // if ( !(Game.map[x][y] instanceof TrapCell) )
+        //     return;
+        // Alert alert = new Alert(AlertType.WARNING);
+        // alert.setTitle("Trap Warning");
+        // alert.setHeaderText("Player Stepped on a Trap!");
+        // alert.setContentText("Be careful!");
 
-        // Add a custom button to close the alert
-        ButtonType closeButton = new ButtonType("Close");
-        alert.getButtonTypes().setAll(closeButton);
+        // // Add a custom button to close the alert
+        // ButtonType closeButton = new ButtonType("Close");
+        // alert.getButtonTypes().setAll(closeButton);
 
-        // Show the alert and wait for user interaction
-        alert.showAndWait();
+        // // Show the alert and wait for user interaction
+        // alert.showAndWait();
         
     }
 

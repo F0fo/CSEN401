@@ -103,7 +103,7 @@ if (Game.map[tX][tY] instanceof CollectibleCell) {
 
 	@Override
 	public void attack() throws NotEnoughActionsException, InvalidTargetException {
-		if (actionsAvailable < 1)
+		if (actionsAvailable < 1 && !(this instanceof Fighter && this.isSpecialAction()))
 			throw new NotEnoughActionsException("You need at least 1 action point to be able to attack.");
 		if (this.getTarget() == null)
 			throw new InvalidTargetException("You should select a target to attack first.");

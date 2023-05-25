@@ -18,16 +18,6 @@ import model.world.CharacterCell;
 import model.world.CollectibleCell;
 
 public class Board {
-    // if visible:
-    // Layer 0: base
-    // Layer 1: button if empty, otherwise vaccine/supply/zombie/character
-    // Layer 2: button if layer 1 was vaccine/supply/zombie/character
-
-    // if not visible:
-    // Layer 0: base
-    // Layer 1: visibility if empty, otherwise vaccine/supply/zombie/character
-    // Layer 2: visibility if layer 1 was vaccine/supply/zombie/character, button otherwise
-    // Layer 3: button if layer 2 was visibility
 
     private static final int TILE_SIZE = 48;
     public static GridPane mapGrid = new GridPane();
@@ -83,7 +73,6 @@ public class Board {
                 }
                 mapGrid.add(s, j, i);
             }
-           // visibilityPane();
         }
 
         mapGrid.setAlignment(Pos.CENTER_RIGHT);
@@ -164,6 +153,53 @@ public class Board {
         }
     }
 
+    public static void zombieAdd(GridPane mapPane){
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j < 15; j++){
+                if(Game.map[14 - i][j] instanceof CharacterCell && ((CharacterCell)Game.map[14 - i][j]).getCharacter() instanceof Zombie){
+                    StackPane s = getStackPane(j, i);
+                    if(!(s.getChildren().get(1) instanceof ImageView)){
+                        Image imgZombie = new Image("file:Resources/Images/zombie.png");
+                        ImageView imgZombieView = new ImageView(imgZombie);
+                        imgZombieView.setFitHeight(TILE_SIZE);
+                        imgZombieView.setPreserveRatio(true);
+                        s.getChildren().add(1, imgZombieView);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void characterRemove(GridPane mapPane){
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j < 15; j++){
+                if(Game.map[14 - i][j] instanceof CharacterCell && ((CharacterCell)Game.map[14 - i][j]).getCharacter() == null){
+                    StackPane s = getStackPane(j, i);
+                    if((s.getChildren().get(1) instanceof ImageView)){
+                        s.getChildren().remove(1);
+                        for(int k = 0; k < Game.heroes.size(); k++){
+                            if(Game.heroes.get(k).getTarget() != null){
+                                if(Game.heroes.get(k).getTarget().getLocation().x == 14 - i && 
+                                Game.heroes.get(k).getTarget().getLocation().y == j)
+                                    Game.heroes.get(k).setTarget(null);
+                            }
+                        }
+                        if(Main.selectedChar.getCurrentHp() <= 0){
+                            if(Game.heroes.size() > 0){
+                                Main.selectedChar = Game.heroes.get(0);
+                            }
+                            else
+                            Main.selectedChar = null;
+                            StatsManager.clearStats();
+                            StatsManager.updateSelectedStats();
+                            StatsManager.updateOtherStats();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static StackPane getStackPane(int j, int i){
         for(Node node: mapGrid.getChildren()){
             if(GridPane.getRowIndex(node) == i && GridPane.getColumnIndex(node) == j){
@@ -172,27 +208,5 @@ public class Board {
         }
         return null;
     }
-
-    // public static void visibilityPane()
-    // {
-    //     for(int i = 0; i < 15; i++)
-    //     {
-    //         for(int j = 0; j < 15; j++)
-    //         {
-    //             if(!(Game.map[14 - i][j].isVisible()))
-    //             {
-    //                 StackPane s = getStackPane(j, i);
-    //                 Image img = new Image("file:Resources/Images/visibillityPane");
-    //                 ImageView imgView = new ImageView(img);
-    //                 imgView.setFitHeight(TILE_SIZE);
-    //                 imgView.setPreserveRatio(true);
-    //                 s.getChildren().add(imgView);
-    //             }
-    //         } 
-    //     }
-
-        
-    
-
 
 }
