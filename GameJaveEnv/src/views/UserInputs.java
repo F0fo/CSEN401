@@ -167,9 +167,9 @@ public class UserInputs {
                         Board.characterRemove(Board.mapGrid);
                         Board.zombieAdd(Board.mapGrid);
 
-                        // StatsManager.clearStats();
-                        // StatsManager.updateSelectedStats();
-                        // StatsManager.updateOtherStats();
+                        StatsManager.clearStats();
+                        StatsManager.updateSelectedStats();
+                        StatsManager.updateOtherStats();
 
                         Board.makeInvisible(Board.mapGrid);
                         Board.makeVisible(Board.mapGrid);
@@ -183,6 +183,7 @@ public class UserInputs {
                     try {
                         Main.selectedChar.cure();
                         Board.heroManager(Board.mapGrid);
+                        Main.selectedChar.setTarget(null);
 
                         StatsManager.clearStats();
                         StatsManager.updateSelectedStats();
@@ -199,6 +200,8 @@ public class UserInputs {
 
                         Board.zombieAdd(Board.mapGrid);
                         Board.characterRemove(Board.mapGrid);
+
+                        StatsManager.updateSelectedStats();
 
                     } catch ( InvalidTargetException | NotEnoughActionsException e1)
                     {

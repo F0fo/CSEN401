@@ -111,7 +111,7 @@ public class StatsManager {
         Main.selectedCharStats2.setText("");
         Main.selectedCharImg.setGraphic(null);
 
-        for(int i = 0; i < Game.heroes.size(); i++){
+        for(int i = 0; i < Main.otherCharTexts.length; i++){
             Main.otherCharTexts[i].setText("");
             Main.otherCharImgs[i].setGraphic(null);
         }

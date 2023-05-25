@@ -32,7 +32,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     public static ImageView[] charImgViewsBorder = new ImageView[8];
     public Label statsLabel = new Label();
     private ArrayList<Hero> AH;
-    private HBox levelRoot;
+    private StackPane levelRoot;
     private Stage stage;
     private VBox statsRoot;
 
@@ -226,11 +226,12 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         // ------------------------------------------------------------------------------------------------------
 
         // creating level root char stats root
-        levelRoot = new HBox(2);
+        levelRoot = new StackPane();
         levelRoot.setBackground(BG);
         statsRoot = new VBox(2);
         statsRoot.setPadding(new Insets(60));
         levelRoot.getChildren().add(statsRoot);
+        statsRoot.setTranslateX(0); statsRoot.setTranslateY(0);
 
         // creating selected char stats area
         selectedCharRoot = new HBox(3);
@@ -299,6 +300,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         Board.makeVisible(mapGrid);
 
         levelRoot.getChildren().add(mapGrid);
+        mapGrid.setTranslateX(-130); mapGrid.setTranslateY(-30);
         Game.printMap(Game.map);
     }
 
