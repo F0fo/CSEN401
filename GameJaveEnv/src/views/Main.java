@@ -3,6 +3,8 @@ package views;
 import java.util.ArrayList;
 
 import engine.Game;
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -21,6 +23,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.characters.Hero;
+import model.characters.Zombie;
 
 public class Main extends Application implements EventHandler<MouseEvent> {
 
@@ -57,6 +60,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     public static Label selectedCharStats1 = new Label();
     public static Label selectedCharStats2 = new Label();
     public static Label selectedCharImg = new Label();
+    
 
     public static void main(String[] args) {
         launch(args);
@@ -82,11 +86,15 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         Label subtitle = new Label("LEGACY");
         subtitle.setId("subtitle");
 
+
+
         // creating start and quit buttons
         Button start = new Button("Start Game");
         Button quit = new Button("Quit");
         start.setBackground(null);
         quit.setBackground(null);
+        
+       
 
         start.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
