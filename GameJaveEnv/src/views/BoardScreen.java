@@ -2,6 +2,8 @@ package views;
 import java.util.Stack;
 
 import engine.Game;
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -42,6 +44,31 @@ public class BoardScreen extends Application {
     @Override
     public void start(Stage mainBoard)  throws Exception
     {
+         //Creating endTurn button HERE add it to the scee + fix map to become a stack otherwise the button will move alongside it
+         //since endturn will be implemented, spawning should be handeled as well (i think)
+         Button endTurnButton = new Button("End Turn");
+         endTurnButton.setBackground(null);
+         
+         endTurnButton.setOnAction(new EventHandler<ActionEvent>() {
+             public void handle(ActionEvent actionEvent) {
+                     try {
+                        engine.Game.endTurn();
+                    } catch (NotEnoughActionsException | InvalidTargetException e) {
+                        e.printStackTrace();
+                    }
+             }
+         });
+         endTurnButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+             public void handle(MouseEvent mouseEvent) {
+                 endTurnButton.setText("> Start Game");
+             }
+         });
+         endTurnButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+             public void handle(MouseEvent mouseEvent) {
+                 endTurnButton.setText("Start Game");
+             }
+         });
+ 
 
     // StackPane selectedStats = new StackPane(); //shows the stats of the selected hero
     // StackPane briefStats = new StackPane(); //shows the breif stats of unselected hero
@@ -86,6 +113,8 @@ public class BoardScreen extends Application {
             }
         }
         mapGrid.add(createCell("heroPane"), 0, 14 - 0);
+
+        
         
         Scene scene = new Scene(mapGrid);
         mainBoard.setScene(scene);
@@ -164,11 +193,12 @@ public class BoardScreen extends Application {
             break;
 
             case "visiblePane":
-            Image img5 = new Image("file:Resources/Images/Visibility.png");
+            Image img5 = new Image("file:Resources/Images/visibilityPane.png");
             ImageView imgView5 = new ImageView(img5);
             stackPane.getChildren().add(imgView5);
             default:    
             break;
+            
 
         }
 

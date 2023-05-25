@@ -13,6 +13,7 @@ import exceptions.InvalidTargetException;
 import exceptions.MovementException;
 import exceptions.NoAvailableResourcesException;
 import exceptions.NotEnoughActionsException;
+import views.UserInputs;
 
 public abstract class Hero extends Character {
 
@@ -84,7 +85,7 @@ public abstract class Hero extends Character {
 			throw new MovementException("You cannot move outside the borders of the map.");
 		if (Game.map[tX][tY] instanceof CharacterCell && ((CharacterCell) Game.map[tX][tY]).getCharacter() != null)
 			throw new MovementException("You cannot move to an occuppied cell.");
-		else if (Game.map[tX][tY] instanceof CollectibleCell) {
+if (Game.map[tX][tY] instanceof CollectibleCell) {
 			((CollectibleCell) Game.map[tX][tY]).getCollectible().pickUp(this);
 		} else if (Game.map[tX][tY] instanceof TrapCell) {
 			this.setCurrentHp(this.getCurrentHp() - ((TrapCell) Game.map[tX][tY]).getTrapDamage());

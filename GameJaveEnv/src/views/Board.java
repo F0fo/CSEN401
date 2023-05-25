@@ -1,5 +1,7 @@
 package views;
 
+import org.hamcrest.core.IsInstanceOf;
+
 import engine.Game;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -81,6 +83,7 @@ public class Board {
                 }
                 mapGrid.add(s, j, i);
             }
+           // visibilityPane();
         }
 
         mapGrid.setAlignment(Pos.CENTER_RIGHT);
@@ -169,4 +172,27 @@ public class Board {
         }
         return null;
     }
+
+    // public static void visibilityPane()
+    // {
+    //     for(int i = 0; i < 15; i++)
+    //     {
+    //         for(int j = 0; j < 15; j++)
+    //         {
+    //             if(!(Game.map[14 - i][j].isVisible()))
+    //             {
+    //                 StackPane s = getStackPane(j, i);
+    //                 Image img = new Image("file:Resources/Images/visibillityPane");
+    //                 ImageView imgView = new ImageView(img);
+    //                 imgView.setFitHeight(TILE_SIZE);
+    //                 imgView.setPreserveRatio(true);
+    //                 s.getChildren().add(imgView);
+    //             }
+    //         } 
+    //     }
+
+        
+    
+
+
 }
