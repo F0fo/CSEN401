@@ -46,6 +46,12 @@ public class Board {
                 b.addEventFilter(MouseEvent.MOUSE_PRESSED, UserInputs.mouseHandler);
                 b.addEventFilter(KeyEvent.KEY_PRESSED, UserInputs.keyHandler);
 
+                Image imgTop = new Image("file:Resources/Images/top.png");
+                ImageView imgTopView = new ImageView(imgTop);
+                b.setGraphic(imgTopView);
+                imgTopView.setFitHeight(TILE_SIZE);
+                imgTopView.setPreserveRatio(true);
+
                 s.getChildren().addAll(imgBaseView, b);
 
                 if(Game.map[14 - i][j] instanceof CollectibleCell){
@@ -129,6 +135,30 @@ public class Board {
         }
 
         return mapPane;
+    }
+
+    public static void makeVisible(GridPane mapPane){
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j < 15; j++){
+                if(Game.map[14 - i][j].isVisible()){
+                    StackPane s = getStackPane(j, i);
+                    Button b = (Button)s.getChildren().get(s.getChildren().size() - 1);
+                    b.getGraphic().setVisible(false);
+                }
+            }
+        }
+    }
+
+    public static void makeInvisible(GridPane mapPane){
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j < 15; j++){
+                if(!(Game.map[14 - i][j].isVisible())){
+                    StackPane s = getStackPane(j, i);
+                    Button b = (Button)s.getChildren().get(s.getChildren().size() - 1);
+                    b.getGraphic().setVisible(true);
+                }
+            }
+        }
     }
 
     public static StackPane getStackPane(int j, int i){

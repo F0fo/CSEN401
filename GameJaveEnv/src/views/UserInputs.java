@@ -67,6 +67,8 @@ public class UserInputs {
                         Board.mapGrid = Board.heroManager(Board.mapGrid);
                         
                         StatsManager.updateSelectedStats();
+
+                        Board.makeVisible(Board.mapGrid);
                         
                     } catch (MovementException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
@@ -85,6 +87,8 @@ public class UserInputs {
 
                         StatsManager.updateSelectedStats();
 
+                        Board.makeVisible(Board.mapGrid);
+
                     } catch (MovementException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
                     }
@@ -102,7 +106,13 @@ public class UserInputs {
 
                         StatsManager.updateSelectedStats();
 
-                    } catch (MovementException | NotEnoughActionsException e1) {
+                        Board.makeVisible(Board.mapGrid);
+
+                        Game.endTurn();
+                        Board.makeInvisible(Board.mapGrid);
+                        Board.makeVisible(Board.mapGrid);
+
+                    } catch (MovementException | NotEnoughActionsException | InvalidTargetException e1) {
                         e1.printStackTrace();
                     }
                     break;
@@ -118,6 +128,8 @@ public class UserInputs {
                         Board.mapGrid = Board.heroManager(Board.mapGrid);
 
                         StatsManager.updateSelectedStats();
+
+                        Board.makeVisible(Board.mapGrid);
 
                     } catch (MovementException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
