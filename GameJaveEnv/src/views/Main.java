@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -237,6 +238,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         // ------------------------------------------------------------------------------------------------------
 
         // adding scene to stage
+        //scene.setCursor(Cursor.CLOSED_HAND);
         stage.setScene(scene);
         scene.getStylesheets().add(getClass().getResource("Styling.css").toExternalForm());
         stage.show();

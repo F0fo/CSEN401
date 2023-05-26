@@ -186,7 +186,7 @@ public class Board {
                 else{
                     if(Game.map[14 - i][j].isVisible()){
                         if(Game.map[14 - i][j] instanceof CharacterCell && ((CharacterCell)Game.map[14 - i][j]).getCharacter() 
-                            != Main.selectedChar.getTarget())
+                            != Main.selectedChar.getTarget() || !(Game.map[14 - i][j] instanceof CharacterCell))
                             b.getGraphic().setVisible(false);
                     }
                 }
@@ -214,8 +214,8 @@ public class Board {
                 }
                 else{
                     if(Game.map[14 - i][j].isVisible()){
-                        if(Game.map[14 - i][j] instanceof CharacterCell && ((CharacterCell)Game.map[14 - i][j]).getCharacter() 
-                            != Main.selectedChar){
+                        if((Game.map[14 - i][j] instanceof CharacterCell && ((CharacterCell)Game.map[14 - i][j]).getCharacter() 
+                            != Main.selectedChar) || !(Game.map[14 - i][j] instanceof CharacterCell)){
                             b.getGraphic().setVisible(false);
                         }
                     }

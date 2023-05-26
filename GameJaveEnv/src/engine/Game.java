@@ -82,6 +82,7 @@ public class Game {
 	}
 
 	public static void spawnNewZombie() {
+		Boolean b = false;
 		Zombie z = new Zombie();
 		zombies.add(z);
 		int x, y;
@@ -91,7 +92,10 @@ public class Game {
 		} while ((map[x][y] instanceof CharacterCell && ((CharacterCell) map[x][y]).getCharacter() != null)
 				|| (map[x][y] instanceof CollectibleCell) || (map[x][y] instanceof TrapCell));
 		z.setLocation(new Point(x, y));
+		if(map[x][y].isVisible())
+			b = true;
 		map[x][y] = new CharacterCell(z);
+		map[x][y].setVisible(b);
 	}
 
 	public static boolean checkWin() {
