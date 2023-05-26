@@ -88,6 +88,7 @@ public abstract class Character {
 			Game.heroes.remove(this);
 		}
 		Game.map[p.x][p.y] = new CharacterCell(null);
+		Game.map[p.x][p.y].setVisible(true);
 	}
 
 }

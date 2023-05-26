@@ -3,8 +3,6 @@ package views;
 import java.util.ArrayList;
 
 import engine.Game;
-import exceptions.InvalidTargetException;
-import exceptions.NotEnoughActionsException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -23,7 +21,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.characters.Hero;
-import model.characters.Zombie;
 
 public class Main extends Application implements EventHandler<MouseEvent> {
 
@@ -298,6 +295,8 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         GridPane mapGrid = Board.createInitialMap();
         mapGrid = Board.heroManager(mapGrid);
         Board.makeVisible(mapGrid);
+        
+        Board.selectionBorder(mapGrid);
 
         levelRoot.getChildren().add(mapGrid);
         mapGrid.setTranslateX(-130); mapGrid.setTranslateY(-30);

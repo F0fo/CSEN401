@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -30,6 +31,7 @@ import javafx.scene.control.ButtonType;
 
 public class UserInputs {
     public static Zombie selectedZombie;
+    private static final int TILE_SIZE = 48;
 
     public static EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
 
@@ -46,22 +48,31 @@ public class UserInputs {
                     Main.selectedChar = (Hero)((CharacterCell)(Game.map[p.x][p.y])).getCharacter();
                     StatsManager.updateSelectedStats();
                     StatsManager.updateOtherStats();
+
+                    Board.targetBorder(Board.mapGrid);
+                    Board.selectionBorder(Board.mapGrid);
                 }
                 break;
 
                 case SECONDARY:
                 s = (StackPane)((Button)m.getSource()).getParent();
                 p = findStackPane(s);
-                if(Game.map[p.x][p.y] instanceof CharacterCell){
+                if(Game.map[p.x][p.y] instanceof CharacterCell && Game.map[p.x][p.y].isVisible()){
                     Main.selectedChar.setTarget(((CharacterCell)(Game.map[p.x][p.y])).getCharacter());
+                    
+                    Board.selectionBorder(Board.mapGrid);
+                    Board.targetBorder(Board.mapGrid);
                 }
                 break;
+
 
                 default:
                 break;
             } 
         } 
      };
+
+     //public static EventHandler<
 
      public static EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
         public void handle(KeyEvent e){
@@ -85,6 +96,9 @@ public class UserInputs {
                         Board.makeVisible(Board.mapGrid);
 
                         Board.characterRemove(Board.mapGrid);
+
+                        Board.selectionBorder(Board.mapGrid);
+                        Board.targetBorder(Board.mapGrid);
                         
                     } catch (MovementException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
@@ -109,6 +123,9 @@ public class UserInputs {
 
                         Board.characterRemove(Board.mapGrid);
 
+                        Board.selectionBorder(Board.mapGrid);
+                        Board.targetBorder(Board.mapGrid);
+
                     } catch (MovementException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
                     }
@@ -131,6 +148,9 @@ public class UserInputs {
                         Board.makeVisible(Board.mapGrid);
 
                         Board.characterRemove(Board.mapGrid);
+
+                        Board.selectionBorder(Board.mapGrid);
+                        Board.targetBorder(Board.mapGrid);
 
                     } catch (MovementException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
@@ -155,6 +175,9 @@ public class UserInputs {
                         Board.makeVisible(Board.mapGrid);
                         
                         Board.characterRemove(Board.mapGrid);
+
+                        Board.selectionBorder(Board.mapGrid);
+                        Board.targetBorder(Board.mapGrid);
                         
                     } catch (MovementException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
@@ -174,6 +197,9 @@ public class UserInputs {
                         Board.makeInvisible(Board.mapGrid);
                         Board.makeVisible(Board.mapGrid);
 
+                        Board.targetBorder(Board.mapGrid);
+                        Board.selectionBorder(Board.mapGrid);
+
                     } catch (NotEnoughActionsException | InvalidTargetException e1) {
                         e1.printStackTrace();
                     }
@@ -189,6 +215,9 @@ public class UserInputs {
                         StatsManager.updateSelectedStats();
                         StatsManager.updateOtherStats();
 
+                        Board.targetBorder(Board.mapGrid);
+                        Board.selectionBorder(Board.mapGrid);
+
                     } catch (NoAvailableResourcesException | InvalidTargetException | NotEnoughActionsException e1) {
                         e1.printStackTrace();
                     }
@@ -202,6 +231,9 @@ public class UserInputs {
                         Board.characterRemove(Board.mapGrid);
 
                         StatsManager.updateSelectedStats();
+
+                        Board.targetBorder(Board.mapGrid);
+                        Board.selectionBorder(Board.mapGrid);
 
                     } catch ( InvalidTargetException | NotEnoughActionsException e1)
                     {
@@ -218,7 +250,9 @@ public class UserInputs {
                         StatsManager.updateSelectedStats();
                         StatsManager.updateOtherStats();
 
-                                                            //need to test fighter special after fixing attack 
+                        Board.selectionBorder(Board.mapGrid);
+                        Board.targetBorder(Board.mapGrid);
+
                     } catch (InvalidTargetException | NoAvailableResourcesException e1)
                     {
                         e1.printStackTrace();
