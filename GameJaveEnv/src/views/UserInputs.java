@@ -31,7 +31,6 @@ import javafx.scene.control.ButtonType;
 
 public class UserInputs {
     public static Zombie selectedZombie;
-    private static final int TILE_SIZE = 48;
 
     public static EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
 
@@ -72,8 +71,6 @@ public class UserInputs {
         } 
      };
 
-     //public static EventHandler<
-
      public static EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
         public void handle(KeyEvent e){
             KeyCode keyCode = e.getCode();
@@ -82,11 +79,20 @@ public class UserInputs {
             {
                 case W:
                     try {
+                        int oldX = (int) Main.selectedChar.getLocation().getX();
+                        int oldY = (int) Main.selectedChar.getLocation().getY();
+                        Boolean trap = false;
+                        if(oldX + 1 < 15 && Game.map[oldX + 1][oldY] instanceof TrapCell){
+                            trap = true;
+                        }
+
                         Main.selectedChar.move(Direction.UP);
+                        Main.exceptionLabel.setText("");
 
                         int X = (int) Main.selectedChar.getLocation().getX() - 1;
                         int Y = (int) Main.selectedChar.getLocation().getY();
-                        trapWarning(X,Y);
+                        if(trap)
+                            trapWarning();
                         StackPane s = Board.getStackPane(Y, 14-X);
                         if(s.getChildren().get(1) instanceof ImageView)
                             s.getChildren().remove(1);
@@ -101,17 +107,26 @@ public class UserInputs {
                         Board.targetBorder(Board.mapGrid);
                         
                     } catch (MovementException | NotEnoughActionsException e1) {
-                        e1.printStackTrace();
+                        Main.exceptionLabel.setText(e1.getMessage());
                     }
                     break;
 
                 case A:
                     try {
+                        int oldX = (int) Main.selectedChar.getLocation().getX();
+                        int oldY = (int) Main.selectedChar.getLocation().getY();
+                        Boolean trap = false;
+                        if(oldY - 1 >= 0 && Game.map[oldX][oldY - 1] instanceof TrapCell){
+                            trap = true;
+                        }
+
                         Main.selectedChar.move(Direction.LEFT);
+                        Main.exceptionLabel.setText("");
 
                         int X = (int) Main.selectedChar.getLocation().getX();
                         int Y = (int) Main.selectedChar.getLocation().getY() + 1;
-                        trapWarning(X,Y);
+                        if(trap)
+                            trapWarning();
                         StackPane s = Board.getStackPane(Y, 14 - X);
                         if(s.getChildren().get(1) instanceof ImageView)
                             s.getChildren().remove(1);
@@ -127,17 +142,27 @@ public class UserInputs {
                         Board.targetBorder(Board.mapGrid);
 
                     } catch (MovementException | NotEnoughActionsException e1) {
-                        e1.printStackTrace();
+                        Main.exceptionLabel.setText(e1.getMessage());
                     }
                     break;
 
                 case S:
                     try {
+                        int oldX = (int) Main.selectedChar.getLocation().getX();
+                        int oldY = (int) Main.selectedChar.getLocation().getY();
+                        Boolean trap = false;
+                        if(oldX - 1 >= 0 && Game.map[oldX - 1][oldY] instanceof TrapCell){
+                            trap = true;
+                        }
+                        
                         Main.selectedChar.move(Direction.DOWN);
+                        Main.exceptionLabel.setText("");
+                        Main.checkGameOver();
 
                         int X = (int) Main.selectedChar.getLocation().getX() + 1;
                         int Y = (int) Main.selectedChar.getLocation().getY();
-                        trapWarning(X,Y);
+                        if(trap)
+                            trapWarning();
                         StackPane s = Board.getStackPane(Y, 14 - X);
                         if(s.getChildren().get(1) instanceof ImageView)
                             s.getChildren().remove(1);
@@ -153,18 +178,27 @@ public class UserInputs {
                         Board.targetBorder(Board.mapGrid);
 
                     } catch (MovementException | NotEnoughActionsException e1) {
-                        e1.printStackTrace();
+                            Main.exceptionLabel.setText(e1.getMessage());
                     }
                     break;
                 
                     
-                    case D:
+                case D:
                     try {
+                        int oldX = (int) Main.selectedChar.getLocation().getX();
+                        int oldY = (int) Main.selectedChar.getLocation().getY();
+                        Boolean trap = false;
+                        if(oldY + 1 < 15 && Game.map[oldX][oldY + 1] instanceof TrapCell){
+                            trap = true;
+                        }
+
                         Main.selectedChar.move(Direction.RIGHT);
+                        Main.exceptionLabel.setText("");
                         
                         int X = (int) Main.selectedChar.getLocation().getX();
                         int Y = (int) Main.selectedChar.getLocation().getY() - 1;
-                        trapWarning(X,Y);
+                        if(trap)
+                            trapWarning();
                         StackPane s = Board.getStackPane(Y, 14 - X);
                         if(s.getChildren().get(1) instanceof ImageView)
                         s.getChildren().remove(1);
@@ -180,13 +214,14 @@ public class UserInputs {
                         Board.targetBorder(Board.mapGrid);
                         
                     } catch (MovementException | NotEnoughActionsException e1) {
-                        e1.printStackTrace();
+                        Main.exceptionLabel.setText(e1.getMessage());
                     }
                     break;
                     
                 case E:
                     try {
                         Game.endTurn();
+                        Main.exceptionLabel.setText("");
                         Board.characterRemove(Board.mapGrid);
                         Board.zombieAdd(Board.mapGrid);
 
@@ -200,32 +235,37 @@ public class UserInputs {
                         Board.targetBorder(Board.mapGrid);
                         Board.selectionBorder(Board.mapGrid);
 
+                        Main.checkGameOver();
+
                     } catch (NotEnoughActionsException | InvalidTargetException e1) {
-                        e1.printStackTrace();
+                        Main.exceptionLabel.setText(e1.getMessage());
                     }
                     break;
                     
                 case C:
                     try {
                         Main.selectedChar.cure();
+                        Main.exceptionLabel.setText("");
                         Board.heroManager(Board.mapGrid);
                         Main.selectedChar.setTarget(null);
-
+                        
                         StatsManager.clearStats();
                         StatsManager.updateSelectedStats();
                         StatsManager.updateOtherStats();
-
+                        
                         Board.targetBorder(Board.mapGrid);
                         Board.selectionBorder(Board.mapGrid);
+                        Main.checkWin(false);
 
                     } catch (NoAvailableResourcesException | InvalidTargetException | NotEnoughActionsException e1) {
-                        e1.printStackTrace();
+                        Main.exceptionLabel.setText(e1.getMessage());
                     }
                     break;
-                case R:
+                case X:
                     try 
                     {
                         Main.selectedChar.attack();
+                        Main.exceptionLabel.setText("");
 
                         Board.zombieAdd(Board.mapGrid);
                         Board.characterRemove(Board.mapGrid);
@@ -237,13 +277,14 @@ public class UserInputs {
 
                     } catch ( InvalidTargetException | NotEnoughActionsException e1)
                     {
-                        e1.printStackTrace();
+                        Main.exceptionLabel.setText(e1.getMessage());
                     }
                     break;
-                case T:
+                case Q:
                 try 
                     {
                         Main.selectedChar.useSpecial();
+                        Main.exceptionLabel.setText("");
                         Board.makeVisible(Board.mapGrid);
                         
                         StatsManager.clearStats();
@@ -255,9 +296,14 @@ public class UserInputs {
 
                     } catch (InvalidTargetException | NoAvailableResourcesException e1)
                     {
-                        e1.printStackTrace();
+                        Main.exceptionLabel.setText(e1.getMessage());
                     }
                     break;
+                
+                case P:
+                    Main.checkWin(true);
+                    break;
+
                 default:
                     break;
             }
@@ -275,11 +321,9 @@ public class UserInputs {
         return null;
     }
 
-    private static void trapWarning(int x, int y)  //not detecting trap cell properly [HERE] 
+    private static void trapWarning()  //not detecting trap cell properly [HERE] 
     {
 
-        // if ( !(Game.map[x][y] instanceof TrapCell) )
-        //     return;
         // Alert alert = new Alert(AlertType.WARNING);
         // alert.setTitle("Trap Warning");
         // alert.setHeaderText("Player Stepped on a Trap!");
@@ -291,6 +335,8 @@ public class UserInputs {
 
         // // Show the alert and wait for user interaction
         // alert.showAndWait();
+
+        Main.exceptionLabel.setText("You walked into a trap!");
         
     }
 

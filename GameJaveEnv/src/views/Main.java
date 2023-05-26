@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -31,8 +32,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     public Label statsLabel = new Label();
     private ArrayList<Hero> AH;
     private StackPane levelRoot;
-    private Stage stage;
+    private static Stage stage;
     private VBox statsRoot;
+    private static StackPane menuRoot;
 
     public static VBox otherCharsRoot = new VBox();
     public static HBox otherCharsHbox1 = new HBox(3);
@@ -58,6 +60,8 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     public static Label selectedCharStats1 = new Label();
     public static Label selectedCharStats2 = new Label();
     public static Label selectedCharImg = new Label();
+
+    public static Label exceptionLabel = new Label();
     
 
     public static void main(String[] args) {
@@ -67,7 +71,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     public void start(Stage stage) throws Exception {
         // creating start menu scene and stack pane
         this.stage = stage;
-        StackPane menuRoot = new StackPane();
+        menuRoot = new StackPane();
         StackPane charSelectRoot = new StackPane();
         VBox left = new VBox();
         VBox right = new VBox();
@@ -91,6 +95,8 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         Button quit = new Button("Quit");
         start.setBackground(null);
         quit.setBackground(null);
+        start.setPadding(new Insets(0));
+        quit.setPadding(new Insets(0));
         
        
 
@@ -136,7 +142,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         // adding title and buttons
         left.getChildren().addAll(title, subtitle);
         right.getChildren().addAll(start, quit);
-        right.setSpacing(10);
+        right.setSpacing(30);
 
         // adding components to vbox
         left.setAlignment(Pos.BOTTOM_LEFT);
@@ -238,7 +244,8 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         // ------------------------------------------------------------------------------------------------------
 
         // adding scene to stage
-        //scene.setCursor(Cursor.CLOSED_HAND);
+        Image cursorImg = new Image("file:Resources/Images/cursor.png");
+        scene.setCursor(new ImageCursor(cursorImg));
         stage.setScene(scene);
         scene.getStylesheets().add(getClass().getResource("Styling.css").toExternalForm());
         stage.show();
@@ -302,6 +309,11 @@ public class Main extends Application implements EventHandler<MouseEvent> {
 
         levelRoot.getChildren().add(mapGrid);
         mapGrid.setTranslateX(-130); mapGrid.setTranslateY(-30);
+
+        exceptionLabel.setId("selectedChar");
+        levelRoot.getChildren().add(exceptionLabel);
+        exceptionLabel.setTranslateX(280); exceptionLabel.setTranslateY(380);
+
         Game.printMap(Game.map);
     }
 
@@ -425,6 +437,81 @@ public class Main extends Application implements EventHandler<MouseEvent> {
             else if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 gameStart(7);
             }
+        }
+    }
+
+    // public static void checkWin(){
+    //     String s = "you didnt win";
+    //     if(Game.checkWin())
+    //         s = "you won";
+    //     System.out.println(s);
+    // }
+
+    public static void checkWin(Boolean p){
+        if (Game.checkWin() || p){
+            Image youWin = new Image("file:Resources/Images/win.png");
+            Button quit = new Button("Quit Game");
+            quit.setBackground(null);
+            quit.setPadding(new Insets(0));
+            // Button backToMenu = new Button("Back to Menu");
+            // backToMenu.setBackground(null);
+            // backToMenu.setPadding(new Insets(0));
+
+            VBox winScreenLayout = new VBox();
+            BackgroundImage BI = new BackgroundImage(youWin, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+            Background BG = new Background(BI);
+            winScreenLayout.setBackground(BG);
+
+            quit.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent actionEvent) {
+                    Platform.exit();
+                }
+            });
+            // backToMenu.setOnAction(new EventHandler<ActionEvent>() {
+            //     public void handle(ActionEvent actionEvent){
+            //         stage.getScene().setRoot(menuRoot);
+            //     }
+            // });
+
+            winScreenLayout.setAlignment(Pos.BOTTOM_LEFT);
+            winScreenLayout.setPadding(new Insets(80));
+            winScreenLayout.getChildren().addAll(quit);
+            winScreenLayout.setSpacing(30);
+
+            stage.getScene().setRoot(winScreenLayout);
+        }
+    }
+
+    public static void checkGameOver(){
+        if(Game.checkGameOver()){
+            Button quit = new Button("Quit Game");
+            quit.setBackground(null);
+            quit.setPadding(new Insets(0));
+            // Button backToMenu = new Button("Back to Menu");
+            // backToMenu.setBackground(null);
+            // backToMenu.setPadding(new Insets(0));
+
+            VBox lossScreenLayout = new VBox();
+            lossScreenLayout.setId("lossRoot");
+
+            quit.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent actionEvent) {
+                    Platform.exit();
+                }
+            });
+            // backToMenu.setOnAction(new EventHandler<ActionEvent>() {
+            //     public void handle(ActionEvent actionEvent){
+            //         stage.getScene().setRoot(menuRoot);
+            //     }
+            // });
+
+            lossScreenLayout.setAlignment(Pos.BOTTOM_LEFT);
+            lossScreenLayout.setPadding(new Insets(80));
+            lossScreenLayout.getChildren().addAll(quit);
+            lossScreenLayout.setSpacing(30);
+
+            stage.getScene().setRoot(lossScreenLayout);
         }
     }
 }

@@ -5,7 +5,7 @@ import engine.Game;
 public class StatsManager {
 
     public static void updateSelectedStats(){
-        
+        Main.checkGameOver();
         String s1 = "Name: " + Main.selectedChar.getName() + "\nType: " + Main.selectedChar.getClass().getSimpleName() + "\nHP: " +
         Main.selectedChar.getCurrentHp() + "/" + Main.selectedChar.getMaxHp() + "\nActions: " + Main.selectedChar.getActionsAvailable() + "/" +
         Main.selectedChar.getMaxActions();

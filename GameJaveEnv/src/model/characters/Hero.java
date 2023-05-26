@@ -64,7 +64,7 @@ public abstract class Hero extends Character {
 
 	public void move(Direction d) throws MovementException, NotEnoughActionsException {
 		if (actionsAvailable < 1)
-			throw new NotEnoughActionsException("You need at least 1 action point in order to move.");
+			throw new NotEnoughActionsException("Not enough actions.");
 		int tX = getLocation().x;
 		int tY = getLocation().y;
 		switch (d) {
@@ -82,9 +82,9 @@ public abstract class Hero extends Character {
 			break;
 		}
 		if (tX < 0 || tY < 0 || tX > Game.map.length - 1 || tY > Game.map.length - 1)
-			throw new MovementException("You cannot move outside the borders of the map.");
+			throw new MovementException("Cannot move outside map.");
 		if (Game.map[tX][tY] instanceof CharacterCell && ((CharacterCell) Game.map[tX][tY]).getCharacter() != null)
-			throw new MovementException("You cannot move to an occuppied cell.");
+			throw new MovementException("Cannot move to an occuppied cell.");
 if (Game.map[tX][tY] instanceof CollectibleCell) {
 			((CollectibleCell) Game.map[tX][tY]).getCollectible().pickUp(this);
 		} else if (Game.map[tX][tY] instanceof TrapCell) {
@@ -104,13 +104,13 @@ if (Game.map[tX][tY] instanceof CollectibleCell) {
 	@Override
 	public void attack() throws NotEnoughActionsException, InvalidTargetException {
 		if (actionsAvailable < 1 && !(this instanceof Fighter && this.isSpecialAction()))
-			throw new NotEnoughActionsException("You need at least 1 action point to be able to attack.");
+			throw new NotEnoughActionsException("Not enough actions.");
 		if (this.getTarget() == null)
-			throw new InvalidTargetException("You should select a target to attack first.");
+			throw new InvalidTargetException("Must select a target.");
 		if (!checkDistance())
-			throw new InvalidTargetException("You are only able to attack adjacent targets.");
+			throw new InvalidTargetException("Can only attack adjacent targets.");
 		if (this.getTarget() instanceof Hero)
-			throw new InvalidTargetException("You can only attack zombies.");
+			throw new InvalidTargetException("Can only attack zombies.");
 		super.attack();
 		if (this instanceof Fighter && (this.isSpecialAction()))
 			return;
@@ -119,8 +119,7 @@ if (Game.map[tX][tY] instanceof CollectibleCell) {
 
 	public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException {
 		if (this.getSupplyInventory().size() == 0)
-			throw new NoAvailableResourcesException(
-					"You need to have at least 1 supply in your inventory to use your special abililty.");
+			throw new NoAvailableResourcesException("Not enough supplies.");
 		this.supplyInventory.get(0).use(this);
 		this.setSpecialAction(true);
 	}
@@ -138,15 +137,15 @@ if (Game.map[tX][tY] instanceof CollectibleCell) {
 	public void cure() throws NoAvailableResourcesException, InvalidTargetException, NotEnoughActionsException {
 		if (this.vaccineInventory.size() == 0)
 			throw new NoAvailableResourcesException(
-					"You need to have at least 1 vaccine in your inventory to be able to cure zombies.");
+					"Not enough vaccines.");
 		if (this.actionsAvailable < 1)
-			throw new NotEnoughActionsException("You need to have at least 1 action point in order to cure a zombie.");
+			throw new NotEnoughActionsException("Not enough actions.");
 		if (this.getTarget() == null)
-			throw new InvalidTargetException("You need to pick a target to cure first.");
+			throw new InvalidTargetException("Must select a target.");
 		if (!checkDistance())
-			throw new InvalidTargetException("You are only able to cure adjacent targets.");
+			throw new InvalidTargetException("Can only cure adjacent targets.");
 		if (!(this.getTarget() instanceof Zombie))
-			throw new InvalidTargetException("You can only cure zombies.");
+			throw new InvalidTargetException("Can only cure zombies.");
 		this.vaccineInventory.get(0).use(this);
 		actionsAvailable--;
 	}

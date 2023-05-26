@@ -39,3 +39,8 @@
 #mapButton{
     -fx-background-color: rgb(255, 255, 255, 0);
 }
+
+#lossRoot{
+    -fx-background-image: url("file:Resources/Images/loss.png");
+    -fx-background-size: cover;
+}
