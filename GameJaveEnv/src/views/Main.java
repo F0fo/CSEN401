@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -86,10 +85,14 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         Background BG = new Background(BI);
 
         // creating title and subtitle
-        Font pressGothic = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 120 * factor);
+        Font titleFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 120 * factor);
         Label title = new Label("THE\nLAST\nOF US:");
+        title.setFont(titleFont);
+
+        Font subtitleFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 80 * factor);
         Label subtitle = new Label("LEGACY");
-        subtitle.setId("subtitle");
+        subtitle.setFont(subtitleFont);
+        //subtitle.setId("subtitle");
 
 
 
@@ -100,6 +103,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         quit.setBackground(null);
         start.setPadding(new Insets(0));
         quit.setPadding(new Insets(0));
+        Font buttonFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 60 * factor);
+        start.setFont(buttonFont);
+        quit.setFont(buttonFont);
         
        
 
@@ -219,16 +225,18 @@ public class Main extends Application implements EventHandler<MouseEvent> {
 
         // scene title
         Label selectCharLabel = new Label("Select a hero!");
-        selectCharLabel.setId("subtitle");
+        selectCharLabel.setFont(subtitleFont);
         charSelectRoot.getChildren().add(selectCharLabel);
-        selectCharLabel.setTranslateX(-530 * factor); selectCharLabel.setTranslateY(-300 * factor);
+        selectCharLabel.setTranslateX(-200 * factor); selectCharLabel.setTranslateY(-300 * factor);
 
         // loading heroes from csv
         Game.loadHeroes("Resources/Other/Heros.csv");
         AH = Game.availableHeroes;
         charSelectRoot.getChildren().add(statsLabel);
+        Font statsFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 50 * factor);
+        statsLabel.setFont(statsFont);
         statsLabel.setId("stats");
-        statsLabel.setTranslateX(530 * factor); statsLabel.setTranslateY(0);
+        statsLabel.setTranslateX(530 * factor); statsLabel.setTranslateY(80 * factor);
         
         // ------------------------------------------------------------------------------------------------------
 
@@ -259,9 +267,11 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         StatsManager.updateSelectedStats();
         StatsManager.updateOtherStats();
 
+        Font selectedCharFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 40 * factor);
+
         selectedCharRoot.getChildren().addAll(selectedCharImg, selectedCharStats1, selectedCharStats2);
-        selectedCharStats1.setId("selectedChar");
-        selectedCharStats2.setId("selectedChar");
+        selectedCharStats1.setFont(selectedCharFont);
+        selectedCharStats2.setFont(selectedCharFont);
 
         VBox otherChar1 = new VBox();
         otherChar1.getChildren().addAll(otherCharImg1, otherCharText1);
@@ -280,6 +290,13 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         otherChar4.setAlignment(Pos.CENTER);
         otherChar5.setAlignment(Pos.CENTER);
 
+        Font otherCharFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 22 * factor);
+        otherCharText1.setFont(otherCharFont);
+        otherCharText2.setFont(otherCharFont);
+        otherCharText3.setFont(otherCharFont);
+        otherCharText4.setFont(otherCharFont);
+        otherCharText5.setFont(otherCharFont);
+
         otherCharText1.setId("otherChar");
         otherCharText2.setId("otherChar");
         otherCharText3.setId("otherChar");
@@ -296,6 +313,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         otherCharsRoot.setSpacing(20 * factor);
 
         statsRoot.getChildren().addAll(selectedCharRoot, otherCharsRoot);
+        statsRoot.setSpacing(30 * factor);
     }
 
     public void gameStart(int n){
@@ -314,6 +332,8 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         mapGrid.setTranslateX(-130 * factor); mapGrid.setTranslateY(-30 * factor);
 
         exceptionLabel.setId("selectedChar");
+        Font selectedCharFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 40 * factor);
+        exceptionLabel.setFont(selectedCharFont);
         levelRoot.getChildren().add(exceptionLabel);
         exceptionLabel.setTranslateX(280 * factor); exceptionLabel.setTranslateY(380 * factor);
 
@@ -324,7 +344,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[0]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[0].setGraphic(charImgViewsBorder[0]);
-                statsLabel.setText("Name: " + AH.get(0).getName() + "\nType: " + AH.get(0).getClass().getSimpleName() + 
+                statsLabel.setText(AH.get(0).getName() + "\nType: " + AH.get(0).getClass().getSimpleName() + 
                 "\nMax HP: " + AH.get(0).getMaxHp() + "\nMax Actions: " + AH.get(0).getMaxActions() + "\nAttack Damage: " 
                 + AH.get(0).getAttackDmg());
             }
@@ -339,7 +359,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[1]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[1].setGraphic(charImgViewsBorder[1]);
-                statsLabel.setText("Name: " + AH.get(1).getName() + "\nType: " + AH.get(1).getClass().getSimpleName() + 
+                statsLabel.setText(AH.get(1).getName() + "\nType: " + AH.get(1).getClass().getSimpleName() + 
                 "\nMax HP: " + AH.get(1).getMaxHp() + "\nMax Actions: " + AH.get(1).getMaxActions() + "\nAttack Damage: " 
                 + AH.get(1).getAttackDmg());
             }
@@ -354,7 +374,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[2]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[2].setGraphic(charImgViewsBorder[2]);
-                statsLabel.setText("Name: " + AH.get(2).getName() + "\nType: " + AH.get(2).getClass().getSimpleName() + 
+                statsLabel.setText(AH.get(2).getName() + "\nType: " + AH.get(2).getClass().getSimpleName() + 
                 "\nMax HP: " + AH.get(2).getMaxHp() + "\nMax Actions: " + AH.get(2).getMaxActions() + "\nAttack Damage: " 
                 + AH.get(2).getAttackDmg());
             }
@@ -369,7 +389,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[3]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[3].setGraphic(charImgViewsBorder[3]);
-                statsLabel.setText("Name: " + AH.get(3).getName() + "\nType: " + AH.get(3).getClass().getSimpleName() + 
+                statsLabel.setText(AH.get(3).getName() + "\nType: " + AH.get(3).getClass().getSimpleName() + 
                 "\nMax HP: " + AH.get(3).getMaxHp() + "\nMax Actions: " + AH.get(3).getMaxActions() + "\nAttack Damage: " 
                 + AH.get(3).getAttackDmg());
             }
@@ -384,7 +404,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[4]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[4].setGraphic(charImgViewsBorder[4]);
-                statsLabel.setText("Name: " + AH.get(4).getName() + "\nType: " + AH.get(4).getClass().getSimpleName() + 
+                statsLabel.setText(AH.get(4).getName() + "\nType: " + AH.get(4).getClass().getSimpleName() + 
                 "\nMax HP: " + AH.get(4).getMaxHp() + "\nMax Actions: " + AH.get(4).getMaxActions() + "\nAttack Damage: " 
                 + AH.get(4).getAttackDmg());
             }
@@ -399,7 +419,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[5]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[5].setGraphic(charImgViewsBorder[5]);
-                statsLabel.setText("Name: " + AH.get(5).getName() + "\nType: " + AH.get(5).getClass().getSimpleName() + 
+                statsLabel.setText(AH.get(5).getName() + "\nType: " + AH.get(5).getClass().getSimpleName() + 
                 "\nMax HP: " + AH.get(5).getMaxHp() + "\nMax Actions: " + AH.get(5).getMaxActions() + "\nAttack Damage: " 
                 + AH.get(5).getAttackDmg());
             }
@@ -414,7 +434,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[6]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[6].setGraphic(charImgViewsBorder[6]);
-                statsLabel.setText("Name: " + AH.get(6).getName() + "\nType: " + AH.get(6).getClass().getSimpleName() + 
+                statsLabel.setText(AH.get(6).getName() + "\nType: " + AH.get(6).getClass().getSimpleName() + 
                 "\nMax HP: " + AH.get(6).getMaxHp() + "\nMax Actions: " + AH.get(6).getMaxActions() + "\nAttack Damage: " 
                 + AH.get(6).getAttackDmg());
             }
@@ -429,7 +449,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         if(mouseEvent.getSource() == charButtons[7]){
             if(mouseEvent.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 charButtons[7].setGraphic(charImgViewsBorder[7]);
-                statsLabel.setText("Name: " + AH.get(7).getName() + "\nType: " + AH.get(7).getClass().getSimpleName() + 
+                statsLabel.setText(AH.get(7).getName() + "\nType: " + AH.get(7).getClass().getSimpleName() + 
                 "\nMax HP: " + AH.get(7).getMaxHp() + "\nMax Actions: " + AH.get(7).getMaxActions() + "\nAttack Damage: " 
                 + AH.get(7).getAttackDmg());
             }
@@ -442,13 +462,6 @@ public class Main extends Application implements EventHandler<MouseEvent> {
             }
         }
     }
-
-    // public static void checkWin(){
-    //     String s = "you didnt win";
-    //     if(Game.checkWin())
-    //         s = "you won";
-    //     System.out.println(s);
-    // }
 
     public static void checkWin(Boolean p){
         if (Game.checkWin() || p){

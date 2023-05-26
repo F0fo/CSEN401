@@ -1,24 +1,13 @@
 .label{
     -fx-text-fill: "white";
-    -fx-font-size: 120;
     -fx-font-family: "PressGothicW01-Regular";
 }
 
-#subtitle{
-    -fx-font-size: 80;
-}
-
 #stats{
-    -fx-font-size: 50;
     -fx-text-alignment: center;
 }
 
-#selectedChar{
-    -fx-font-size: 40;
-}
-
 #otherChar{
-    -fx-font-size: 22;
     -fx-text-alignment: center;
 }
 
