@@ -3,8 +3,6 @@ package views;
 import java.util.ArrayList;
 
 import engine.Game;
-import exceptions.InvalidTargetException;
-import exceptions.NotEnoughActionsException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -23,7 +21,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.characters.Hero;
-import model.characters.Zombie;
 
 public class Main extends Application implements EventHandler<MouseEvent> {
 
@@ -32,7 +29,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     public static ImageView[] charImgViewsBorder = new ImageView[8];
     public Label statsLabel = new Label();
     private ArrayList<Hero> AH;
-    private HBox levelRoot;
+    private StackPane levelRoot;
     private Stage stage;
     private VBox statsRoot;
 
@@ -226,11 +223,12 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         // ------------------------------------------------------------------------------------------------------
 
         // creating level root char stats root
-        levelRoot = new HBox(2);
+        levelRoot = new StackPane();
         levelRoot.setBackground(BG);
         statsRoot = new VBox(2);
         statsRoot.setPadding(new Insets(60));
         levelRoot.getChildren().add(statsRoot);
+        statsRoot.setTranslateX(0); statsRoot.setTranslateY(0);
 
         // creating selected char stats area
         selectedCharRoot = new HBox(3);
@@ -293,9 +291,15 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         stage.getScene().setRoot(levelRoot);
         selectedChar = Game.heroes.get(0);
         charStatsManager(n);
+
         GridPane mapGrid = Board.createInitialMap();
         mapGrid = Board.heroManager(mapGrid);
+        Board.makeVisible(mapGrid);
+        
+        Board.selectionBorder(mapGrid);
+
         levelRoot.getChildren().add(mapGrid);
+        mapGrid.setTranslateX(-130); mapGrid.setTranslateY(-30);
         Game.printMap(Game.map);
     }
 

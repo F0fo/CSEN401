@@ -3,6 +3,7 @@ package model.characters;
 import java.awt.Point;
 
 import model.world.CharacterCell;
+import views.Main;
 import engine.Game;
 import exceptions.InvalidTargetException;
 import exceptions.NotEnoughActionsException;
@@ -82,10 +83,12 @@ public abstract class Character {
 		if (this instanceof Zombie) {
 			Game.zombies.remove(this);
 			Game.spawnNewZombie();
+			
 		} else if (this instanceof Hero) {
 			Game.heroes.remove(this);
 		}
 		Game.map[p.x][p.y] = new CharacterCell(null);
+		Game.map[p.x][p.y].setVisible(true);
 	}
 
 }
