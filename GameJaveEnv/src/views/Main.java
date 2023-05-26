@@ -38,7 +38,8 @@ public class Main extends Application implements EventHandler<MouseEvent> {
 
     public static VBox otherCharsRoot = new VBox();
     public static HBox otherCharsHbox1 = new HBox(3);
-    public static HBox otherCharsHbox2 = new HBox(2);
+    public static HBox otherCharsHbox2 = new HBox();
+    public static HBox otherCharsHbox3 = new HBox();
     public static VBox otherCharRoot = new VBox();
 
     public static Label otherCharImg1 = new Label();
@@ -46,6 +47,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     public static Label otherCharImg3 = new Label();
     public static Label otherCharImg4 = new Label();
     public static Label otherCharImg5 = new Label();
+    public static Label targetImg = new Label();
     public static Label[] otherCharImgs = {otherCharImg1, otherCharImg2, otherCharImg3, otherCharImg4, otherCharImg5};
 
     public static Label otherCharText1 = new Label();
@@ -53,6 +55,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     public static Label otherCharText3 = new Label();
     public static Label otherCharText4 = new Label();
     public static Label otherCharText5 = new Label();
+    public static Label targetText = new Label();
     public static Label[] otherCharTexts = {otherCharText1, otherCharText2, otherCharText3, otherCharText4, otherCharText5};
     
     public static HBox selectedCharRoot;
@@ -62,6 +65,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     public static Label selectedCharImg = new Label();
 
     public static Label exceptionLabel = new Label();
+    public static Label exceptionBox = new Label();
 
     public static final double factor = Screen.getPrimary().getVisualBounds().getWidth() / 1536;
     
@@ -99,13 +103,17 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         // creating start and quit buttons
         Button start = new Button("Start Game");
         Button quit = new Button("Quit");
+        Button controls = new Button("Controls");
         start.setBackground(null);
         quit.setBackground(null);
+        controls.setBackground(null);
         start.setPadding(new Insets(0));
         quit.setPadding(new Insets(0));
+        controls.setPadding(new Insets(0));
         Font buttonFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 60 * factor);
         start.setFont(buttonFont);
         quit.setFont(buttonFont);
+        controls.setFont(buttonFont);
         
        
 
@@ -141,6 +149,48 @@ public class Main extends Application implements EventHandler<MouseEvent> {
             }
         });
 
+        StackPane controlsRoot = new StackPane();
+        controlsRoot.setId("controlsRoot");
+
+        controls.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                stage.getScene().setRoot(controlsRoot);
+            }
+        });
+        controls.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                controls.setText("> Controls");
+            }
+        });
+        controls.setOnMouseExited(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                controls.setText("Controls");
+            }
+        });
+
+        Button backToMenu = new Button("Back to Menu");
+        backToMenu.setBackground(null);
+        backToMenu.setPadding(new Insets(0));
+        controlsRoot.setAlignment(Pos.BOTTOM_RIGHT);
+        controlsRoot.setPadding(new Insets(0, 70 * factor, 50 * factor, 0));
+        controlsRoot.getChildren().add(backToMenu);
+
+        backToMenu.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                stage.getScene().setRoot(menuRoot);
+            }
+        });
+        backToMenu.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                backToMenu.setText("> Back to Menu");
+            }
+        });
+        backToMenu.setOnMouseExited(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                backToMenu.setText("Back to Menu");
+            }
+        });
+
         // changing icon, setting window title, and setting window to fullscreen
         Image icon = new Image("file:Resources/Images/icon.png");
         stage.getIcons().add(icon);
@@ -150,7 +200,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
 
         // adding title and buttons
         left.getChildren().addAll(title, subtitle);
-        right.getChildren().addAll(start, quit);
+        right.getChildren().addAll(start, controls, quit);
         right.setSpacing(30);
 
         // adding components to vbox
@@ -283,12 +333,15 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         otherChar4.getChildren().addAll(otherCharImg4, otherCharText4);
         VBox otherChar5 = new VBox();
         otherChar5.getChildren().addAll(otherCharImg5, otherCharText5);
+        VBox targetCharBox = new VBox();
+        targetCharBox.getChildren().addAll(targetImg, targetText);
 
         otherChar1.setAlignment(Pos.CENTER);
         otherChar2.setAlignment(Pos.CENTER);
         otherChar3.setAlignment(Pos.CENTER);
         otherChar4.setAlignment(Pos.CENTER);
         otherChar5.setAlignment(Pos.CENTER);
+        targetCharBox.setAlignment(Pos.CENTER);
 
         Font otherCharFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 22 * factor);
         otherCharText1.setFont(otherCharFont);
@@ -296,20 +349,24 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         otherCharText3.setFont(otherCharFont);
         otherCharText4.setFont(otherCharFont);
         otherCharText5.setFont(otherCharFont);
+        targetText.setFont(otherCharFont);
 
         otherCharText1.setId("otherChar");
         otherCharText2.setId("otherChar");
         otherCharText3.setId("otherChar");
         otherCharText4.setId("otherChar");
         otherCharText5.setId("otherChar");
+        targetText.setId("otherChar");
 
         otherCharsHbox1.getChildren().addAll(otherChar1, otherChar2, otherChar3);
-        otherCharsHbox2.getChildren().addAll(otherChar4, otherChar5);
+        otherCharsHbox2.getChildren().addAll(otherChar4, otherChar5, targetCharBox);
+        otherCharsHbox3.getChildren().add(targetCharBox);
 
         otherCharsHbox1.setSpacing(100 * factor);
         otherCharsHbox2.setSpacing(100 * factor);
+        otherCharsHbox3.setSpacing(100 * factor);
         
-        otherCharsRoot.getChildren().addAll(otherCharsHbox1, otherCharsHbox2);
+        otherCharsRoot.getChildren().addAll(otherCharsHbox1, otherCharsHbox2, otherCharsHbox3);
         otherCharsRoot.setSpacing(20 * factor);
 
         statsRoot.getChildren().addAll(selectedCharRoot, otherCharsRoot);
@@ -332,10 +389,21 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         mapGrid.setTranslateX(-130 * factor); mapGrid.setTranslateY(-30 * factor);
 
         exceptionLabel.setId("selectedChar");
-        Font selectedCharFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 40 * factor);
-        exceptionLabel.setFont(selectedCharFont);
-        levelRoot.getChildren().add(exceptionLabel);
+        Font exceptionFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 30 * factor);
+        exceptionLabel.setFont(exceptionFont);
+        
+        Image exceptionImg = new Image("file:Resources/Images/text.png");
+        ImageView exceptionImgView = new ImageView(exceptionImg);
+        exceptionImgView.setFitWidth(450 * factor);
+        exceptionImgView.setPreserveRatio(true);
+
+        exceptionBox.setGraphic(exceptionImgView);
+        exceptionBox.getGraphic().setVisible(false);
+        exceptionBox.setMouseTransparent(true);
+        
+        levelRoot.getChildren().addAll(exceptionBox, exceptionLabel);
         exceptionLabel.setTranslateX(280 * factor); exceptionLabel.setTranslateY(380 * factor);
+        exceptionBox.setTranslateX(280 * factor); exceptionImgView.setTranslateY(383 * factor);
 
         Game.printMap(Game.map);
     }
@@ -463,8 +531,8 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         }
     }
 
-    public static void checkWin(Boolean p){
-        if (Game.checkWin() || p){
+    public static void checkWin(){
+        if (Game.checkWin()){
             Image youWin = new Image("file:Resources/Images/win.png");
             Button quit = new Button("Quit Game");
             quit.setBackground(null);
@@ -479,9 +547,23 @@ public class Main extends Application implements EventHandler<MouseEvent> {
             Background BG = new Background(BI);
             winScreenLayout.setBackground(BG);
 
+            Label youWonText = new Label("You won :D");
+            Font youWonFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 40);
+            youWonText.setFont(youWonFont);
+
             quit.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent actionEvent) {
                     Platform.exit();
+                }
+            });
+            quit.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent mouseEvent) {
+                    quit.setText("Quit Game <");
+                }
+            });
+            quit.setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent mouseEvent) {
+                    quit.setText("Quit Game");
                 }
             });
             // backToMenu.setOnAction(new EventHandler<ActionEvent>() {
@@ -492,7 +574,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
 
             winScreenLayout.setAlignment(Pos.BOTTOM_LEFT);
             winScreenLayout.setPadding(new Insets(80));
-            winScreenLayout.getChildren().addAll(quit);
+            winScreenLayout.getChildren().addAll(youWonText, quit);
             winScreenLayout.setSpacing(30 * factor);
 
             stage.getScene().setRoot(winScreenLayout);
@@ -510,10 +592,23 @@ public class Main extends Application implements EventHandler<MouseEvent> {
 
             VBox lossScreenLayout = new VBox();
             lossScreenLayout.setId("lossRoot");
+            Label youLostText = new Label("You lost :(");
+            Font youLostFont = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 40);
+            youLostText.setFont(youLostFont);
 
             quit.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent actionEvent) {
                     Platform.exit();
+                }
+            });
+            quit.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent mouseEvent) {
+                    quit.setText("> Quit Game");
+                }
+            });
+            quit.setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent mouseEvent) {
+                    quit.setText("Quit Game");
                 }
             });
             // backToMenu.setOnAction(new EventHandler<ActionEvent>() {
@@ -522,9 +617,9 @@ public class Main extends Application implements EventHandler<MouseEvent> {
             //     }
             // });
 
-            lossScreenLayout.setAlignment(Pos.BOTTOM_LEFT);
+            lossScreenLayout.setAlignment(Pos.BOTTOM_RIGHT);
             lossScreenLayout.setPadding(new Insets(80));
-            lossScreenLayout.getChildren().addAll(quit);
+            lossScreenLayout.getChildren().addAll(youLostText, quit);
             lossScreenLayout.setSpacing(30 * factor);
 
             stage.getScene().setRoot(lossScreenLayout);

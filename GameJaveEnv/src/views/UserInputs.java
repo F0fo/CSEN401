@@ -10,8 +10,6 @@ import exceptions.NotEnoughActionsException;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -23,10 +21,6 @@ import model.characters.Zombie;
 import model.characters.Hero;
 import model.world.CharacterCell;
 import model.world.TrapCell;
-import model.characters.Character;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 
 
 public class UserInputs {
@@ -61,6 +55,8 @@ public class UserInputs {
                     
                     Board.selectionBorder(Board.mapGrid);
                     Board.targetBorder(Board.mapGrid);
+
+                    StatsManager.updateOtherStats();
                 }
                 break;
 
@@ -88,6 +84,7 @@ public class UserInputs {
 
                         Main.selectedChar.move(Direction.UP);
                         Main.exceptionLabel.setText("");
+                        Main.exceptionBox.getGraphic().setVisible(false);
 
                         int X = (int) Main.selectedChar.getLocation().getX() - 1;
                         int Y = (int) Main.selectedChar.getLocation().getY();
@@ -108,6 +105,7 @@ public class UserInputs {
                         
                     } catch (MovementException | NotEnoughActionsException e1) {
                         Main.exceptionLabel.setText(e1.getMessage());
+                        Main.exceptionBox.getGraphic().setVisible(true);
                     }
                     break;
 
@@ -122,6 +120,7 @@ public class UserInputs {
 
                         Main.selectedChar.move(Direction.LEFT);
                         Main.exceptionLabel.setText("");
+                        Main.exceptionBox.getGraphic().setVisible(false);
 
                         int X = (int) Main.selectedChar.getLocation().getX();
                         int Y = (int) Main.selectedChar.getLocation().getY() + 1;
@@ -143,6 +142,7 @@ public class UserInputs {
 
                     } catch (MovementException | NotEnoughActionsException e1) {
                         Main.exceptionLabel.setText(e1.getMessage());
+                        Main.exceptionBox.getGraphic().setVisible(true);
                     }
                     break;
 
@@ -157,7 +157,7 @@ public class UserInputs {
                         
                         Main.selectedChar.move(Direction.DOWN);
                         Main.exceptionLabel.setText("");
-                        Main.checkGameOver();
+                        Main.exceptionBox.getGraphic().setVisible(false);
 
                         int X = (int) Main.selectedChar.getLocation().getX() + 1;
                         int Y = (int) Main.selectedChar.getLocation().getY();
@@ -179,6 +179,7 @@ public class UserInputs {
 
                     } catch (MovementException | NotEnoughActionsException e1) {
                             Main.exceptionLabel.setText(e1.getMessage());
+                            Main.exceptionBox.getGraphic().setVisible(true);
                     }
                     break;
                 
@@ -194,6 +195,7 @@ public class UserInputs {
 
                         Main.selectedChar.move(Direction.RIGHT);
                         Main.exceptionLabel.setText("");
+                        Main.exceptionBox.getGraphic().setVisible(false);
                         
                         int X = (int) Main.selectedChar.getLocation().getX();
                         int Y = (int) Main.selectedChar.getLocation().getY() - 1;
@@ -215,6 +217,7 @@ public class UserInputs {
                         
                     } catch (MovementException | NotEnoughActionsException e1) {
                         Main.exceptionLabel.setText(e1.getMessage());
+                        Main.exceptionBox.getGraphic().setVisible(true);
                     }
                     break;
                     
@@ -222,6 +225,7 @@ public class UserInputs {
                     try {
                         Game.endTurn();
                         Main.exceptionLabel.setText("");
+                        Main.exceptionBox.getGraphic().setVisible(false);
                         Board.characterRemove(Board.mapGrid);
                         Board.zombieAdd(Board.mapGrid);
 
@@ -239,6 +243,7 @@ public class UserInputs {
 
                     } catch (NotEnoughActionsException | InvalidTargetException e1) {
                         Main.exceptionLabel.setText(e1.getMessage());
+                        Main.exceptionBox.getGraphic().setVisible(true);
                     }
                     break;
                     
@@ -246,6 +251,7 @@ public class UserInputs {
                     try {
                         Main.selectedChar.cure();
                         Main.exceptionLabel.setText("");
+                        Main.exceptionBox.getGraphic().setVisible(false);
                         Board.heroManager(Board.mapGrid);
                         Main.selectedChar.setTarget(null);
                         
@@ -255,10 +261,11 @@ public class UserInputs {
                         
                         Board.targetBorder(Board.mapGrid);
                         Board.selectionBorder(Board.mapGrid);
-                        Main.checkWin(false);
+                        Main.checkWin();
 
                     } catch (NoAvailableResourcesException | InvalidTargetException | NotEnoughActionsException e1) {
                         Main.exceptionLabel.setText(e1.getMessage());
+                        Main.exceptionBox.getGraphic().setVisible(true);
                     }
                     break;
                 case X:
@@ -266,11 +273,13 @@ public class UserInputs {
                     {
                         Main.selectedChar.attack();
                         Main.exceptionLabel.setText("");
+                        Main.exceptionBox.getGraphic().setVisible(false);
 
                         Board.zombieAdd(Board.mapGrid);
                         Board.characterRemove(Board.mapGrid);
 
                         StatsManager.updateSelectedStats();
+                        StatsManager.updateOtherStats();
 
                         Board.targetBorder(Board.mapGrid);
                         Board.selectionBorder(Board.mapGrid);
@@ -278,6 +287,7 @@ public class UserInputs {
                     } catch ( InvalidTargetException | NotEnoughActionsException e1)
                     {
                         Main.exceptionLabel.setText(e1.getMessage());
+                        Main.exceptionBox.getGraphic().setVisible(true);
                     }
                     break;
                 case Q:
@@ -285,6 +295,7 @@ public class UserInputs {
                     {
                         Main.selectedChar.useSpecial();
                         Main.exceptionLabel.setText("");
+                        Main.exceptionBox.getGraphic().setVisible(false);
                         Board.makeVisible(Board.mapGrid);
                         
                         StatsManager.clearStats();
@@ -297,11 +308,8 @@ public class UserInputs {
                     } catch (InvalidTargetException | NoAvailableResourcesException e1)
                     {
                         Main.exceptionLabel.setText(e1.getMessage());
+                        Main.exceptionBox.getGraphic().setVisible(true);
                     }
-                    break;
-                
-                case P:
-                    Main.checkWin(true);
                     break;
 
                 default:
@@ -323,21 +331,8 @@ public class UserInputs {
 
     private static void trapWarning()  //not detecting trap cell properly [HERE] 
     {
-
-        // Alert alert = new Alert(AlertType.WARNING);
-        // alert.setTitle("Trap Warning");
-        // alert.setHeaderText("Player Stepped on a Trap!");
-        // alert.setContentText("Be careful!");
-
-        // // Add a custom button to close the alert
-        // ButtonType closeButton = new ButtonType("Close");
-        // alert.getButtonTypes().setAll(closeButton);
-
-        // // Show the alert and wait for user interaction
-        // alert.showAndWait();
-
         Main.exceptionLabel.setText("You walked into a trap!");
-        
+        Main.exceptionBox.getGraphic().setVisible(true);
     }
 
 }

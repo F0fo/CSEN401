@@ -1,6 +1,10 @@
 package views;
 
 import engine.Game;
+import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import model.characters.Zombie;
 
 public class StatsManager {
 
@@ -104,6 +108,19 @@ public class StatsManager {
             }
         }
         
+        if(Main.selectedChar.getTarget() != null && Main.selectedChar.getTarget() instanceof Zombie){
+            String s = "HP: " + Main.selectedChar.getTarget().getCurrentHp();
+            Image zombieImg = new Image("file:Resources/Images/zombie-big.png");
+            ImageView zombieImgView = new ImageView(zombieImg);
+            zombieImgView.setFitHeight(h);
+            zombieImgView.setPreserveRatio(true);
+            Main.targetImg.setGraphic(zombieImgView);
+            Main.targetText.setText(s);
+        }
+        else{
+            Main.targetImg.setGraphic(null);
+            Main.targetText.setText("");
+        }
     }
 
     public static void clearStats(){

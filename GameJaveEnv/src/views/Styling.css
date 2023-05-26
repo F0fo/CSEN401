@@ -33,3 +33,8 @@
     -fx-background-image: url("file:Resources/Images/loss.png");
     -fx-background-size: cover;
 }
+
+#controlsRoot{
+    -fx-background-image: url("file:Resources/Images/controls.png");
+    -fx-background-size: cover;
+}
