@@ -4,11 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
-
-
-    
-
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "views.Main",
+            "projectName": "CSEN401_8e196a66"
+        },
         {
             "type": "java",
             "name": "BoardScreen",
