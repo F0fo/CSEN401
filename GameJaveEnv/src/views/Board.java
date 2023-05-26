@@ -21,7 +21,7 @@ import model.world.CollectibleCell;
 
 public class Board {
 
-    private static final int TILE_SIZE = 48;
+    private static final int TILE_SIZE = (int)(48  * Main.factor);
     public static GridPane mapGrid = new GridPane();
 
     public static GridPane createInitialMap(){

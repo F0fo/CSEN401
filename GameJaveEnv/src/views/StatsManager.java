@@ -14,7 +14,7 @@ public class StatsManager {
         "\n  Supplies: " + Main.selectedChar.getSupplyInventory().size();
 
         String name = Main.selectedChar.getName();
-        int h = 190;
+        int h = (int)(190 * Main.factor);
 
         if(name.equals("Joel Miller")){
             Main.selectedCharImg.setGraphic(Main.charImgViewsBorder[0]);
@@ -56,7 +56,7 @@ public class StatsManager {
 
     public static void updateOtherStats(){
         int otherCharsNum = -1;
-        int h = 100;
+        int h = (int)(100 * Main.factor);
         
         for(int i = 0; i < Game.heroes.size(); i++){
             if(!(Game.heroes.get(i).equals(Main.selectedChar))){

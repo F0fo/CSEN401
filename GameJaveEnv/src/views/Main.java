@@ -21,6 +21,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.characters.Hero;
 
@@ -62,6 +63,8 @@ public class Main extends Application implements EventHandler<MouseEvent> {
     public static Label selectedCharImg = new Label();
 
     public static Label exceptionLabel = new Label();
+
+    public static final double factor = Screen.getPrimary().getVisualBounds().getWidth() / 1536;
     
 
     public static void main(String[] args) {
@@ -83,7 +86,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         Background BG = new Background(BI);
 
         // creating title and subtitle
-        Font pressGothic = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 120);
+        Font pressGothic = Font.loadFont("file:Resources/Fonts/Press-Gothic-W01-Regular.ttf", 120 * factor);
         Label title = new Label("THE\nLAST\nOF US:");
         Label subtitle = new Label("LEGACY");
         subtitle.setId("subtitle");
@@ -180,20 +183,20 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         charImg[15] = new Image("file:Resources/Images/henry-big-border.png");
         for(int i = 0; i < 8; i++){
             charImgViews[i] = new ImageView(charImg[i]);
-            charImgViews[i].setFitHeight(270);
+            charImgViews[i].setFitHeight(270 * factor);
             charImgViews[i].setPreserveRatio(true);
         }
         for(int i = 8; i < 16; i++){
             charImgViewsBorder[i - 8] = new ImageView(charImg[i]);
-            charImgViewsBorder[i - 8].setFitHeight(300);
+            charImgViewsBorder[i - 8].setFitHeight(300 * factor);
             charImgViewsBorder[i - 8].setPreserveRatio(true);
         }
 
         // creating button for each character and adding to node
         for(int i = 0; i < 8; i++){
             charButtons[i] = new Button();
-            charButtons[i].setMinSize(180, 270);
-            charButtons[i].setMaxSize(180, 270);
+            charButtons[i].setMinSize(180 * factor, 270 * factor);
+            charButtons[i].setMaxSize(180 * factor, 270 * factor);
             charButtons[i].setOnMouseEntered(this);
             charButtons[i].setOnMouseExited(this);
             charButtons[i].setOnMousePressed(this);
@@ -205,27 +208,27 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         charSelectRoot.getChildren().addAll(chars);
 
         // setting button locations
-        charButtons[0].setTranslateX(40); charButtons[0].setTranslateY(240);
-        charButtons[1].setTranslateX(340); charButtons[1].setTranslateY(240);
-        charButtons[2].setTranslateX(640); charButtons[2].setTranslateY(240);
-        charButtons[3].setTranslateX(940); charButtons[3].setTranslateY(240);
-        charButtons[4].setTranslateX(40); charButtons[4].setTranslateY(540);
-        charButtons[5].setTranslateX(340); charButtons[5].setTranslateY(540);
-        charButtons[6].setTranslateX(640); charButtons[6].setTranslateY(540);
-        charButtons[7].setTranslateX(940); charButtons[7].setTranslateY(540);
+        charButtons[0].setTranslateX(40 * factor); charButtons[0].setTranslateY(240 * factor);
+        charButtons[1].setTranslateX(340 * factor); charButtons[1].setTranslateY(240 * factor);
+        charButtons[2].setTranslateX(640 * factor); charButtons[2].setTranslateY(240 * factor);
+        charButtons[3].setTranslateX(940 * factor); charButtons[3].setTranslateY(240 * factor);
+        charButtons[4].setTranslateX(40 * factor); charButtons[4].setTranslateY(540 * factor);
+        charButtons[5].setTranslateX(340 * factor); charButtons[5].setTranslateY(540 * factor);
+        charButtons[6].setTranslateX(640 * factor); charButtons[6].setTranslateY(540 * factor);
+        charButtons[7].setTranslateX(940 * factor); charButtons[7].setTranslateY(540 * factor);
 
         // scene title
         Label selectCharLabel = new Label("Select a hero!");
         selectCharLabel.setId("subtitle");
         charSelectRoot.getChildren().add(selectCharLabel);
-        selectCharLabel.setTranslateX(-530); selectCharLabel.setTranslateY(-300);
+        selectCharLabel.setTranslateX(-530 * factor); selectCharLabel.setTranslateY(-300 * factor);
 
         // loading heroes from csv
         Game.loadHeroes("Resources/Other/Heros.csv");
         AH = Game.availableHeroes;
         charSelectRoot.getChildren().add(statsLabel);
         statsLabel.setId("stats");
-        statsLabel.setTranslateX(530); statsLabel.setTranslateY(0);
+        statsLabel.setTranslateX(530 * factor); statsLabel.setTranslateY(0);
         
         // ------------------------------------------------------------------------------------------------------
 
@@ -239,7 +242,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
 
         // creating selected char stats area
         selectedCharRoot = new HBox(3);
-        selectedCharRoot.setSpacing(20);
+        selectedCharRoot.setSpacing(20 * factor);
 
         // ------------------------------------------------------------------------------------------------------
 
@@ -286,11 +289,11 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         otherCharsHbox1.getChildren().addAll(otherChar1, otherChar2, otherChar3);
         otherCharsHbox2.getChildren().addAll(otherChar4, otherChar5);
 
-        otherCharsHbox1.setSpacing(100);
-        otherCharsHbox2.setSpacing(100);
+        otherCharsHbox1.setSpacing(100 * factor);
+        otherCharsHbox2.setSpacing(100 * factor);
         
         otherCharsRoot.getChildren().addAll(otherCharsHbox1, otherCharsHbox2);
-        otherCharsRoot.setSpacing(20);
+        otherCharsRoot.setSpacing(20 * factor);
 
         statsRoot.getChildren().addAll(selectedCharRoot, otherCharsRoot);
     }
@@ -308,11 +311,11 @@ public class Main extends Application implements EventHandler<MouseEvent> {
         Board.selectionBorder(mapGrid);
 
         levelRoot.getChildren().add(mapGrid);
-        mapGrid.setTranslateX(-130); mapGrid.setTranslateY(-30);
+        mapGrid.setTranslateX(-130 * factor); mapGrid.setTranslateY(-30 * factor);
 
         exceptionLabel.setId("selectedChar");
         levelRoot.getChildren().add(exceptionLabel);
-        exceptionLabel.setTranslateX(280); exceptionLabel.setTranslateY(380);
+        exceptionLabel.setTranslateX(280 * factor); exceptionLabel.setTranslateY(380 * factor);
 
         Game.printMap(Game.map);
     }
@@ -477,7 +480,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
             winScreenLayout.setAlignment(Pos.BOTTOM_LEFT);
             winScreenLayout.setPadding(new Insets(80));
             winScreenLayout.getChildren().addAll(quit);
-            winScreenLayout.setSpacing(30);
+            winScreenLayout.setSpacing(30 * factor);
 
             stage.getScene().setRoot(winScreenLayout);
         }
@@ -509,7 +512,7 @@ public class Main extends Application implements EventHandler<MouseEvent> {
             lossScreenLayout.setAlignment(Pos.BOTTOM_LEFT);
             lossScreenLayout.setPadding(new Insets(80));
             lossScreenLayout.getChildren().addAll(quit);
-            lossScreenLayout.setSpacing(30);
+            lossScreenLayout.setSpacing(30 * factor);
 
             stage.getScene().setRoot(lossScreenLayout);
         }
